@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<!DOCTYPE bs_bugs SYSTEM "http://developer.berlios.de/export/bs_tasks_0.1.dtd">
+<tasks>
+    <subproject id='778'>
+        <group_id>3028</group_id>
+        <subproject_name>WebSANE frontend</subproject_name>
+        <is_public>1</is_public>
+        <description>CSS, HTML and Javascript that is interpreted on the client side.</description>
+        <task id='1601'>
+            <group_id>778</group_id>
+            <status_id>1</status_id>
+            <priority>3</priority>
+            <created_by id='13541' name='mvirkkil'/>
+            <assigned_to id='100' name='none'/>
+            <start_date>1107727200</start_date>
+            <summary>IE6 compatibility</summary>
+            <details>Make the frontend work in IE6 the same way it currently works in gecko based browsers.
+
+- Workarounds and fixes should be clearly documented.
+- Code should be reused as much as possible.</details>
+            <end_date>1112302800</end_date>
+            <percent_complete>60</percent_complete>
+            <hours>0</hours>
+            <dependency id='4066'>
+                <dep_id>1600</dep_id>
+            </dependency>
+        </task>
+        <task id='1599'>
+            <group_id>778</group_id>
+            <status_id>1</status_id>
+            <priority>1</priority>
+            <created_by id='13541' name='mvirkkil'/>
+            <assigned_to id='100' name='none'/>
+            <start_date>1107727200</start_date>
+            <summary>Opera compatibility</summary>
+            <details>Make the frontend work in Opera the same way it currently works in gecko based browsers.
+
+- Workarounds and fixes should be clearly documented.
+- Code should be reused as much as possible.</details>
+            <end_date>1112302800</end_date>
+            <percent_complete>50</percent_complete>
+            <hours>0</hours>
+            <dependency id='4065'>
+                <dep_id>1600</dep_id>
+            </dependency>
+        </task>
+        <task id='1598'>
+            <group_id>778</group_id>
+            <status_id>1</status_id>
+            <priority>1</priority>
+            <created_by id='13541' name='mvirkkil'/>
+            <assigned_to id='100' name='none'/>
+            <start_date>1107727200</start_date>
+            <summary>KHTML compatibility</summary>
+            <details>Make the frontend work in both Safari and Konqueror the same way it currently works in gecko based browsers.
+
+- Workarounds and fixes should be clearly documented.
+- Code should be reused as much as possible.</details>
+            <end_date>1112302800</end_date>
+            <percent_complete>70</percent_complete>
+            <hours>0</hours>
+            <dependency id='4064'>
+                <dep_id>1600</dep_id>
+            </dependency>
+        </task>
+        <task id='1600'>
+            <group_id>778</group_id>
+            <status_id>1</status_id>
+            <priority>5</priority>
+            <created_by id='13541' name='mvirkkil'/>
+            <assigned_to id='13563' name='vpalmu'/>
+            <assigned_to id='13541' name='mvirkkil'/>
+            <start_date>1107727200</start_date>
+            <summary>Frontend feature freeze for 1.0</summary>
+            <details>We should decide what features we want for the first release, implement them for gecko, and then freeze the frontend featurewise. 
+
+This needs to be done so that others can concentrate on implementing the same feature set for the other browsers, and not have to chase a moving target.</details>
+            <end_date>1109628000</end_date>
+            <percent_complete>0</percent_complete>
+            <hours>0</hours>
+            <dependency id='4058'>
+                <dep_id>100</dep_id>
+            </dependency>
+        </task>
+    </subproject>
+    <subproject id='777'>
+        <group_id>3028</group_id>
+        <subproject_name>WebSANE backend</subproject_name>
+        <is_public>1</is_public>
+        <description>The code that is executed on the server</description>
+    </subproject>
+    <subproject id='776'>
+        <group_id>3028</group_id>
+        <subproject_name>Website</subproject_name>
+        <is_public>1</is_public>
+        <description>Anything related to the project's homepage and the software running it.</description>
+        <task id='1597'>
+            <group_id>776</group_id>
+            <status_id>2</status_id>
+            <priority>5</priority>
+            <created_by id='13541' name='mvirkkil'/>
+            <assigned_to id='13541' name='mvirkkil'/>
+            <start_date>1107727200</start_date>
+            <summary>Generate news section from the RSS feed.</summary>
+            <details>Since we now have an rss source for the website's news, we should use it for posting news. This should only require minor changes in the xsl. 
+
+The one thing that will require a bit of work is making text starting with http:// in to clickable links.</details>
+            <end_date>1107813600</end_date>
+            <percent_complete>100</percent_complete>
+            <hours>0</hours>
+            <dependency id='4063'>
+                <dep_id>100</dep_id>
+            </dependency>
+        </task>
+    </subproject>
+</tasks>
