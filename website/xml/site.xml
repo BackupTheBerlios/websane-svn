@@ -8,6 +8,10 @@
 	<page name="news.html" inmenu="yes" menutitle="News" >
 		<xi:include href="http://developer.berlios.de/export/rss20_bsnews.php?group_id=3028" />
 	</page>
+
+	<page name="plan.html" inmenu="yes" menutitle="Plan" >
+		<xi:include href="plan.xml" />
+	</page>
 	
 	<!-- Nodes with no children will just be added as links to the menu-->
 	<page name="http://developer.berlios.de/forum/forum.php?forum_id=9269" inmenu="yes" menutitle="Feedback forum" />
