@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: UTF8 -*-
 # Copyright (C) 2005: Mikko Virkkilä
 #
 # This program is free software; you can redistribute it and/or

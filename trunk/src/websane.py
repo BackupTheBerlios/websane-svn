@@ -1,6 +1,6 @@
 #!/usr/bin/python
-# -*- coding: iso-8859-1 -*-
-# Copyright (C) 2005: Mikko Virkkil‰
+# -*- coding: UTF8 -*-
+# Copyright (C) 2005: Mikko Virkkil√§
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,11 +20,11 @@ import string
 import sys
 import cgi
 import urllib
-from xml.dom.minidom import parse
 import ConfigParser
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 import scanhandler
+import xmlhandler
 
 #This is a constant and shouldn't be modified
 mmperinch=25.4
@@ -32,29 +32,13 @@ mmperinch=25.4
 config = ConfigParser.ConfigParser()
 scanhandler = scanhandler.ScanHandler()
 
+
 config.read('webserver.cfg')
 extbase=config.get('general','externalbasepath')
 basepath=config.get('general','webserverbase')
 previewfile=config.get('general','previewfile')
+xmlhandler=xmlhandler.XMLHandler('../demo/demo.html')
 
-input_radio={	"imgtype":"COLOR",
-				"rotation":"0"}
-
-input_text={	"brightness":"0",
-				"contrast":"0",
-				"custom_resolution":"0",
-				"filename":"",
-				"left":"20",
-				"top":"50",
-				"width":"100",
-				"height":"200" }
-
-input_hidden={	"action":"" }
-
-input_checkbox={"before_save":"view"}
-
-select{			"filetype":"PNG",
-				"resolution":"200"}
 class ReqHandler(BaseHTTPRequestHandler):
 
 	#Handle a http request for a file
@@ -119,19 +103,10 @@ class ReqHandler(BaseHTTPRequestHandler):
 				
 			#FIXME!
 			elif self.path.endswith('.xhtml'):
-				print 'Opening xml file'
-				f=open(basepath+'/demo.html')
-				self.send_response(200)
-				self.send_header('Content-type','text/html')
-				self.end_headers()
-				
-				dom=parse(f)
-				for input in dom.getElementsByTagName('input'):
-					print input.attributes['name'].value, input.attributes['value'].value
-				self.wfile.write(dom.toxml('UTF8'))
-				dom.unlink() #Clean up
-				f.close()
-			
+				self.sendHeaders('text/html')
+				xmlhandler.setRotation('180')
+				self.wfile.write(xmlhandler.getDocument())
+							
 			#Used for debugging. Displays info about scanner.
 			elif self.path==extbase+'/info':
 				self.sendHeaders('text/plain')
