@@ -4,12 +4,12 @@ websane.py in the src directory.
 Check out the config files for configuration 
 options.
 
-You should extract the entire filestructure and 
+You should extract the entire filestructure and
 run the script from its own directory. 
 
 When you run the websane script it will create
 a webserver on your machine's local port 5423 
-and should point your (Gecko based) browser to 
+and should point your browser to 
 http://127.0.0.1:5423/demo.html to view the 
 interface. A lot of information (and possible
 errors) will be printed out by the websane.py
@@ -26,7 +26,16 @@ not loose you scans. If you exit normally all
 scanned files will be deleted.
 
 
-
+Requirements
+------------
+- SANE installed and configured (you should be 
+  able to scan using scanimage before trying out
+  WebSANE).
+- The Python Imaging Library with SANE support.
+  (on Debian SANE support is in a separate 
+  package)
+- Python minidom. On Debian this comes with the
+  python-xml package.
 
 
 For debugging

@@ -1,5 +1,6 @@
 * Websane 1.0.0 - Lots of stuff - 
- - Cleanup of code (more general functions, split in to classes and files)
+ - Clean up the code (more general functions, split in to classes and files 
+   but a lot more could be done)
  - Filehandling (view, download, delete)
  - Unicode should be better supported
  - Brightness/contrast controlls shown for scanners that support them
@@ -7,6 +8,7 @@
  - Reorganisation of UI buttons
  - Rotation implemented
  - Configuration files
- 
+ - Secure filehandling
+
 * Websane 0.1.0 - Proof of concept - 20050308
  - Initial release.
