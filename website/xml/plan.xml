@@ -49,6 +49,7 @@
 	<li>Landscape-mode scanning</li>
 	<li>Configuration files</li>
 	<li>HTML manipulation on server before sending, html will reflect user's settings</li>
+	<li>Brightness/contrast settings available only if supported by scanner</li>
 </ul>	
 
 <h4>Version 1.1.0</h4>
@@ -57,7 +58,6 @@
 	<li>Using up/down keys in form will affect selection and sliders in all supported browsers</li>
 	<li>Opera support</li>
 	<li>Client-side zooming of the preview image to simplify exact selection</li>
-	<li>Settings available only to certain scanners is detected</li>
 </ul>
 
 <h4>Version 1.2.0</h4>
