@@ -28,7 +28,8 @@ class ScanHandler:
 	rotation=0
 	
 	config = ConfigParser.ConfigParser()
-
+	max_height=297.18
+	max_width=215.9
 	
 	#This is a constant and shouldn't be modified
 	mmperinch=25.4
@@ -46,8 +47,6 @@ class ScanHandler:
 	#Scans a file with the assigned settings and saves it.
 	def scan_and_save(self, file, imgtype):
 		scanner=self.scanner
-
-		self.__rotate_coords()
 
 		t=time()				
 		scanner.start()
@@ -85,35 +84,42 @@ class ScanHandler:
 	def set_scan_bounds_from_preview(self, x_px, y_px, width_px, height_px, rotation=0, previewres=None):
 		if previewres != None:
 			self.previewres=string.atof(previewres)
-		self.scanner.tl_x=string.atof(x_px) * self.mmperinch / self.previewres 
-		self.scanner.tl_y=string.atof(y_px) * self.mmperinch / self.previewres
-		self.scanner.br_x=self.scanner.tl_x + string.atoi(width_px) * self.mmperinch / self.previewres
-		self.scanner.br_y=self.scanner.tl_y + string.atoi(height_px) * self.mmperinch / self.previewres
-		__rotate_coords(string.atoi(rotation))
+		top_x=string.atof(x_px) * self.mmperinch / self.previewres 
+		top_y=string.atof(y_px) * self.mmperinch / self.previewres
+		bottom_x=top_x + string.atoi(width_px) * self.mmperinch / self.previewres
+		bottom_y=top_y + string.atoi(height_px) * self.mmperinch / self.previewres
+		self.__rotate_coords(top_x,top_y,bottom_x,bottom_y,string.atoi(rotation))
 	
-	def __rotate_coords(self,rotation):
+	def __rotate_coords(self,top_x,top_y,bottom_x,bottom_y,rotation):
 		self.rotation=rotation
 		if rotation==0:
-			return
-		elif rotation==90:
-			bottom_y=self.scanner.tl_x
-			top_x=self.scanner.tl_y
-			top_y=self.scanner.br_x
-			bottom_x=self.scanner.br_y
-		elif rotation==180:
-			bottom_x=self.scanner.tl_x
-			bottom_y=self.scanner.tl_y
-			top_x=self.scanner.br_x
-			top_y=self.scanner.br_y
+			self.scanner.tl_x=top_x
+			self.scanner.lt_y=top_y
+			self.scanner.br_x=bottom_x
+			self.scanner.br_y=bottom_y
 		elif rotation==270:
-			top_y=self.scanner.tl_x
-			bottom_x=self.scanner.tl_y
-			bottom_y=self.scanner.br_x
-			top_x=self.scanner.br_y
-		self.scanner.tl_x=top_x
-		self.scanner.tl_y=top_y
-		self.scanner.br_x=bottom_x
-		self.scanner.br_y=bottom_y
+			self.scanner.br_y=self.max_height-top_x
+			self.scanner.tl_x=top_y
+			self.scanner.tl_y=self.max_height-bottom_x
+			self.scanner.br_x=bottom_y
+		elif rotation==180:
+			self.scanner.br_x=self.max_width-top_x
+			self.scanner.br_y=self.max_height-top_y
+			self.scanner.tl_x=self.max_width-bottom_x
+			self.scanner.tl_y=self.max_height-bottom_y
+		elif rotation==90:
+			self.scanner.tl_y=top_x
+			self.scanner.br_x=self.max_width-top_y
+			self.scanner.br_y=bottom_x
+			self.scanner.tl_x=self.max_width-bottom_y
+		print "X1:",self.scanner.tl_x
+		print "Y1:",self.scanner.tl_y
+		print "X2:",self.scanner.br_x
+		print "Y2:",self.scanner.br_y
+		
+
+	def set_preview_rotation(self, rotation):
+		self.rotation=rotation
 		
 	def set_resolution(self, resolution):
 		self.scanner.resolution=string.atof(resolution)

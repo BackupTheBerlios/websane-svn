@@ -63,7 +63,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				if values['action'] == 'snap':
 					scanhandler.reset_settings()
 					scanhandler.set_mode(values['imgtype'])
-					scanhandler.set_rotation(string.atoi(values['rotation']))
+					scanhandler.set_preview_rotation(string.atoi(values['rotation']))
 					scanhandler.update_preview(previewfile)
 					self.path=extbase+'/demo.html'
 				#Handle a scan
