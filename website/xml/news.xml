@@ -8,13 +8,14 @@
 			This website was launced today. The entire site is automagically rebuilt each night from the xml sources in 
 			the subversion repository. A script fetches the subversion sources, and runs xml proc on the xml files using 
 			an xslt stylesheet to create the site. Each part of the site is stored in a separate file that only contains 
-			data. What is to built is written the 
-			<a href="website/xml/site.xml">site.xml</a> 
-			file, and based on that the
+			data. What is to built is written the <a href="website/xml/site.xml">site.xml</a> file, and based on that the
 			xslt processor goes through the files and creates menus and links, in essence creates the entire site. 
 			</p>
 			<p>
-			You can find the sources for the builder in our svn repository or simply under the 
+			The <a href="demo/demo.html">demo</a> interface is also available.
+			</p>
+			<p>
+			You can find the sources for the builder in our svn repository (the demo is there too) or simply under the 
 			<a href="website">website directory</a>
 			</p>
 		</doc>
