@@ -18,7 +18,7 @@ project.
 
 <h3>About this site</h3>
 <p>
-The contents of this site are actually in the projects subversion repository. Each page
+The contents of this site are actually in the project's subversion repository. Each page
 is described there in xml and each nigh a script is run that checks for updates. It
 downloads new versions of the xml files and using xmlproc rebuilds the entire site.
 </p>

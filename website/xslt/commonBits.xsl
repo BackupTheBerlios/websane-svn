@@ -60,7 +60,7 @@
 			<a href="http://validator.w3.org/check?uri=referer"><img src="style/images/xhtml.png" title="Valid XHTML 1.0 Strict" alt="Valid XHTML 1.0 Strict" height="15" width="80" /></a>
 			<a href="http://jigsaw.w3.org/css-validator/check/referer"><img src="style/images/css.png" title="Valid CSS" alt="Valid CSS" height="15" width="80" /></a>
 			<a href="http://www.getfirefox.com"><img src="style/images/ff.png" title="WebSANE recommends Firefox" alt="Firefox preferred" height="15" width="80" /></a>
-			<br />Copyright 2005 Mikko Virkkila<br />
+			<br />Copyright 2005 Mikko Virkkilä<br />
 			<a href="http://developer.berlios.de/projects/websane/">
 				<img src="http://developer.berlios.de/bslogo.php?group_id=3028&amp;type=1" title="WebSANE project page on BerliOS" alt="WebSANE project page on BerliOS" />
 			</a>

@@ -57,7 +57,7 @@
 				
 					<xsl:for-each select="item">
 						<div class="news_title"><xsl:value-of select="title" /></div>
-						<div class="news_time"><xsl:value-of select="date" /></div>
+						<div class="news_time"><xsl:value-of select="author" /> - <xsl:value-of select="date" /></div>
 						<div class="news_content"><xsl:apply-templates select="doc/*" mode="copy" /></div>
 					</xsl:for-each>
 				</div>
