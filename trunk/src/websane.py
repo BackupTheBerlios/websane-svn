@@ -25,6 +25,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 import scanhandler
 import xmlhandler
+import filehandler
 
 #This is a constant and shouldn't be modified
 mmperinch=25.4
@@ -38,13 +39,14 @@ extbase=config.get('general','externalbasepath')
 basepath=config.get('general','webserverbase')
 previewfile=config.get('general','previewfile')
 xmlhandler=xmlhandler.XMLHandler('../demo/demo.html')
+filehandler=filehandler.FileHandler()
 
 class ReqHandler(BaseHTTPRequestHandler):
 
 	#Handle a http request for a file
 	def do_GET(self):
 		if self.path == extbase+'/':
-			self.path='/demo.html'
+			self.path= extbase+'/demo.html'
 		try:	
 			#If the path contains a ? then we should parse it and scan and stuff
 			if self.path.find('?')!=-1:
@@ -66,7 +68,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 					self.path=extbase+'/demo.html'
 				#Handle a scan
 				elif values['action'] == 'scan':
-					self.sendHeaders('image/png')
+					self.sendHeaders('text/html')
 					scanhandler.reset_settings()
 					
 					scanhandler.set_mode(values['imgtype'])
@@ -82,14 +84,24 @@ class ReqHandler(BaseHTTPRequestHandler):
 						scanhandler.set_resolution(string.atof(values['resolution']))
 					
 					scanhandler.set_scan_bounds_from_preview(values['left'],values['top'],values['width'],values['height'],values['rotation'])
-					scanhandler.scan_and_save(self.wfile, values['filetype'])
+					scanhandler.scan_and_save(filehandler.createFile('storedfiles/'+values['filename']), values['filetype'])
+					
+					self.wfile.write('<html><head/><body>Download it from <a href="storedfiles/'+filename+'">storedfiles/'+filename+'</a></body></html>')
+					
 					return
 				#Error, print some debugging info
 				else:
 					self.sendHeaders('text/html')
 					self.wfile.write("<html><head/><body>Error. No action value returned. ",str(values),"</body></html>")
 					return
-
+			
+			if self.path.startswith(extbase+'/storedfiles/'):
+				print "Giving stored file"
+				if filehandler.exists('kuva.png'):
+					self.sendHeaders('application/octet-stream')
+					self.wfile.write( filehandler.loadFile('kuva.png').read() )
+				else:
+					raise IOError
 			#Snap a preview image and send it directly to the browser
 			if self.path==extbase+'/snap':
 				print "Taking snapshot"
