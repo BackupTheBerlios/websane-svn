@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2005: Mikko Virkkil‰
+Copyright (C) 2005: Mikko Virkkil√§
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ function initControl(toGet, toSet) {
 		unit='';
 	}
 	
-    document.getElementById(toSet).style.top=cont_height-50-getCurLevel(toGet)-float_half_height+unit;
+    document.getElementById(toSet).style.top=cont_height-50-(getCurLevel(toGet)/2)-float_half_height+unit;
     
 }
 
@@ -117,10 +117,10 @@ function changelevel(e) {
 
 function getCurLevel(toGet){
 	var result=document.getElementById(toGet).value;
-	var val=result.substr(0, result.length-1);
+	/*var val=result.substr(0, result.length-1);*/
 
 
-	return val;
+	return result;
 }
 
 function endcontrol(e){

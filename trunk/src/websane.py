@@ -100,10 +100,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 			elif self.path==extbase+'/scan':
 				self.sendHeaders('image/png')
 				scanhandler.set_resolution(300.0)
-				
 				scanhandler.scan_and_save(self.wfile, 'PNG')
 				
-			#FIXME!
 			elif self.path==extbase+'/demo.html':
 				self.sendHeaders('text/html')
 				self.wfile.write(xmlhandler.getDocument())

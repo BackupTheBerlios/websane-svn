@@ -51,11 +51,8 @@ class ScanHandler:
 	#Updates the preview file.
 	def update_preview(self, previewfile):
 		self.scanner.quality_cal=False
-		self.scanner.depth=4
 		self.scanner.resolution=self.previewres
 		self.scanner.preview=True
-		
-		print 'Resolution',str(self.scanner.resolution)
 		self.scan_and_save(previewfile, 'PNG')
 
 	#Scans a file with the assigned settings and saves it.
