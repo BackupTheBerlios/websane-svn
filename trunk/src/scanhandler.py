@@ -2,7 +2,7 @@ import string
 import sys
 import sane
 import ConfigParser
-
+from time import time
 
 
 class ScanHandler:
@@ -10,8 +10,9 @@ class ScanHandler:
 	scannerdev=None
 	
 	config = ConfigParser.ConfigParser()
-	
+	config.read("scanner.cfg")
 	previewres=string.atof(config.get('general','previewres'))
+	
 	
 	#This is a constant and shouldn't be modified
 	mmperinch=25.4
@@ -22,14 +23,15 @@ class ScanHandler:
 
 		scanner.quality_cal=False
 		scanner.depth=4
-		scanner.resolution=previewres
+		scanner.resolution=self.previewres
 		scanner.preview=True
 		
+		print 'Resolution',str(scanner.resolution)
 		self.scan_and_save(previewfile, 'PNG')
 
 	#Scans a file with the assigned settings and saves it.
 	def scan_and_save(self, file, imgtype):
-		scanner=self.get_scanner()
+		scanner=self.scanner
 
 		t=time()				
 		scanner.start()
@@ -45,7 +47,7 @@ class ScanHandler:
 		print 'Converting and saving image took ',time()-t,'seconds\n'
 	
 
-	#Convenience method for getting the first scanner available
+	#Convenience method for getting the scanner
 	def get_scanner(self):
 		if (None == self.scanner) :
 			t=time()
@@ -58,23 +60,26 @@ class ScanHandler:
 			print 'Fetching available devices took ',time()-t,'seconds'
 			
 			#We just use the first available device
-			self.scannerdev=devs[string.atoi(config.get('general','devicenumber'))][0]
+			self.scannerdev=devs[string.atoi(self.config.get('general','devicenumber'))][0]
 			
 		t=time()	
 		self.scanner=sane.open(self.scannerdev)
-		print 'Opening the first available device took ', time()-t,'seconds'
+		print 'Opening the selected device took ', time()-t,'seconds'
 
 		return self.scanner
 
+	def get_previewres(self):
+		return self.previewres
 
 	def write_info(self,towriteto):
 			towriteto.write( '\n\nSANE version:\n'+ str(sane.init()))
 			devs = sane.get_devices()
 			towriteto.write( '\n\nAvailable devices:\n'+str(devs))
-			scanner = sane.open(devs[string.atoi(config.get('general','devicenumber'))][0])
+			scanner = sane.open(devs[string.atoi(self.config.get('general','devicenumber'))][0])
 			towriteto.write( '\n\nParameters specified device:\n'+str(scanner.get_parameters()) )
 			towriteto.write( '\n\nOptions:\n'+str(scanner.get_options()) )
 	
-			
-	def __init__(self):
-		config.read("scanner.cfg")
+#	def __init__(self):
+
+#	def __name__:
+#		return 

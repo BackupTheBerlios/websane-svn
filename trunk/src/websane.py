@@ -54,13 +54,13 @@ config = ConfigParser.ConfigParser()
 config.read("mimetypes.cfg")
 
 
-scanhandler = ScanHandler()
+scanhandler = scanhandler.ScanHandler()
 
 class ReqHandler(BaseHTTPRequestHandler):
 
 	#Handle a http request for a file
 	def do_GET(self):
-		if self.path == '/' and self.path == '':
+		if self.path == extbase+'/':
 			self.path='/demo.html'
 		try:	
 			#If the path contains a ? then we should parse it and scan and stuff
@@ -94,10 +94,10 @@ class ReqHandler(BaseHTTPRequestHandler):
 						scanner.resolution=string.atof(values['resolution'])
 					
 					#Translate the pixel locations in to realworld coordinates (in to mm)
-					scanner.tl_x=string.atof(values['left']) * mmperinch / previewres 
-					scanner.tl_y=string.atof(values['top']) * mmperinch / previewres
-					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * mmperinch / previewres 
-					scanner.br_y=scanner.tl_y + string.atoi(values['height']) * mmperinch / previewres
+					scanner.tl_x=string.atof(values['left']) * mmperinch / scanhandler.get_previewres() 
+					scanner.tl_y=string.atof(values['top']) * mmperinch / scanhandler.get_previewres()
+					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * mmperinch / scanhandler.get_previewres() 
+					scanner.br_y=scanner.tl_y + string.atoi(values['height']) * mmperinch / scanhandler.get_previewres()
 					
 					scanhandler.scan_and_save(self.wfile, values['filetype'])
 					return
@@ -111,18 +111,11 @@ class ReqHandler(BaseHTTPRequestHandler):
 
 			#Snap a preview image and send it directly to the browser
 			if self.path==extbase+'/snap':
+				print "Taking snapshot"
 				self.send_response(200)
 				self.send_header('Content-type','image/png')
 				self.end_headers()
-
-				scanner=scanhandler.get_scanner()
-
-				scanner.preview=True
-				scanner.quality_cal=False
-				scanner.depth=4
-				scanner.resolution=previewres
-
-				scanhandler.scan_and_save(self.wfile, 'PNG')
+				scanhandler.update_preview(self.wfile)
 
 			#Do a scan and return the image directly to the browser
 			elif self.path==extbase+'/scan':
