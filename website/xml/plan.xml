@@ -50,6 +50,7 @@ Images should be stored for soemthing like 30mins and the url given to the user 
 be ungessable and unique (=basedir/timestamp+randomnumbers/imagename.png).
 </li>
 </ul>
+</ul>
 </p>
 <h3>Goals</h3>
 This are rough and are not attainable for the first release.
