@@ -20,8 +20,6 @@ import string
 import sys
 import cgi
 import urllib
-from time import time
-from time import sleep
 #from xml.dom.ext import PrettyPrint
 #from xml.dom import implementation
 #from xml.dom.ext.reader import Sax2
@@ -30,16 +28,8 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 import scanhandler
 
-#Not completely implemented. YOU SHOULD PROBABLY CHANGE THIS TO READ extbase=''
-extbase='/'
-
-#Path for where the static content is
-basepath='../demo'
 #This is a constant and shouldn't be modified
 mmperinch=25.4
-
-#The preview file is stored here
-previewfile='/tmp/preview.png'
 
 #Undocumented but very important features.
 #These are actually how to convert the websane representation of the 
@@ -51,10 +41,12 @@ pheight=19475988/magicint #pheight is the height of the page in mm. Not used.
 
 
 config = ConfigParser.ConfigParser()
-config.read("mimetypes.cfg")
-
-
 scanhandler = scanhandler.ScanHandler()
+
+config.read("webserver.cfg")
+extbase=config('general','externalbasepath')
+basepath=config('general','webserverbase')
+previewfile=config('general','previewfile')
 
 class ReqHandler(BaseHTTPRequestHandler):
 
@@ -73,59 +65,37 @@ class ReqHandler(BaseHTTPRequestHandler):
 					self.path=extbase+'/demo.html'
 				#Handle a scan
 				elif values['action'] == 'scan':
-					self.send_response(200)
-					self.send_header('Content-type','image/png')
-					self.end_headers()
+					self.sendHeaders('image/png')
+									
+					scanhandler.reset_settings()
 					
-					scanner=scanhandler.get_scanner()
-					
-					if values['imgtype'] == None:
-						scanner.mode='Color'
-					if values['imgtype'] == 'BW':
-						scanner.mode='Lineart'
-					elif values['imgtype'] == 'GRAY':
-						scanner.mode='Gray'
-					else:
-						scanner.mode='Color'
+					scanhandler.set_mode(values['imgtype'])
 					
 					if values['resolution'] == 'OTHER':
-						scanner.resolution=string.atof(values['custom_resolution'])
+						scanhandler.set_resolution(string.atof(values['custom_resolution']))
 					else:
-						scanner.resolution=string.atof(values['resolution'])
+						scanhandler.set_resolution(string.atof(values['resolution']))
 					
-					#Translate the pixel locations in to realworld coordinates (in to mm)
-					scanner.tl_x=string.atof(values['left']) * mmperinch / scanhandler.get_previewres() 
-					scanner.tl_y=string.atof(values['top']) * mmperinch / scanhandler.get_previewres()
-					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * mmperinch / scanhandler.get_previewres() 
-					scanner.br_y=scanner.tl_y + string.atoi(values['height']) * mmperinch / scanhandler.get_previewres()
+					scanhandler.set_scan_bounds_from_preview(values['left'],values['top'],values['width_px'],values['height_px'])
 					
 					scanhandler.scan_and_save(self.wfile, values['filetype'])
 					return
 				#Error, print some debugging info
 				else:
-					self.send_response(200)
-					self.send_header('Content-type','text/html')
-					self.end_headers()
+					self.sendHeaders('text/html')
 					self.wfile.write("<html><head/><body>Error. No action value returned. ",str(values),"</body></html>")
 					return
 
 			#Snap a preview image and send it directly to the browser
 			if self.path==extbase+'/snap':
 				print "Taking snapshot"
-				self.send_response(200)
-				self.send_header('Content-type','image/png')
-				self.end_headers()
+				self.sendHeaders('image/png')
 				scanhandler.update_preview(self.wfile)
 
 			#Do a scan and return the image directly to the browser
 			elif self.path==extbase+'/scan':
-				self.send_response(200)
-				self.send_header('Content-type','image/png')
-				self.end_headers()
-				
-				scanner=scanhandler.get_scanner()
-				
-				scanner.resolution=300.0
+				self.sendHeaders('image/png')
+				scanhandler.set_resolution(300.0)
 				
 				scanhandler.scan_and_save(self.wfile, 'PNG')
 				
@@ -144,35 +114,27 @@ class ReqHandler(BaseHTTPRequestHandler):
 #			
 			#Used for debugging. Displays info about scanner.
 			elif self.path==extbase+'/info':
-				self.send_response(200)
-				self.send_header('Conent-type','text/plain')
-				self.end_headers()
+				self.sendHeaders('text/plain')
 				scanhandler.write_info(self.wfile)
 			
 			#We replace chair.jpg with the preview file.
 			elif self.path==extbase+'/chair.jpg':
 				f=open(previewfile)
-				self.send_response(200)
-				self.send_header('Content-type','image/png')
-				self.end_headers()
+				self.sendHeaders('image/png')
 				self.wfile.write(f.read())
 				f.close()
 			#If nothing special was aksed, just serve the file of the specified name
 			else:
 				print basepath+self.path
 				f=open(basepath+self.path)
-				self.send_response(200)
 				
 				if self.getContentType() == None:
 					#Let's not serve unknown stuff
-					self.send_header('Content-type','text/plain')
-					self.end_headers()
+					self.sendHeaders('text/plain')
 					f.close()
 					return
-				else:
-					self.send_header('Content-type',self.getContentType())
 					
-				self.end_headers()
+				self.sendHeaders( self.getContentType())
 				self.wfile.write(f.read())
 				f.close()
 		#If we cant open the file (=can't find the file) we send a 404
@@ -202,13 +164,17 @@ class ReqHandler(BaseHTTPRequestHandler):
 	
 	#Maps extensions to mime types
 	def getContentType(self):
-                extension = string.split(self.path,'.')[-1]
+		extension = string.split(self.path,'.')[-1]
 		try:
 			return config.get('mimetypes', extension)
 		except NoOptionError:
 			return
 
-
+	def sendHeaders(self, conttype):
+		self.send_response(200)
+		self.send_header('Content-type',conttype)
+		self.end_headers()
+		
 	#This method is not written by me and as such is not licensed under the GPL
 	#Refer to the original code for the copyright holder and license.
 	def urlParse(self, url):
@@ -244,13 +210,14 @@ class ReqHandler(BaseHTTPRequestHandler):
 def main():
 	try:
 	
-		server=HTTPServer(('',5423), ReqHandler)
+		server=HTTPServer(('',string.atoi(config.get('general', 'port'))), ReqHandler)
 		
 		print 'Webserver started'
 		server.serve_forever()
+		print 'Serving until keyboard interrupt received (ctrl+c)'
 	except KeyboardInterrupt:
 		print 'Shutting down server'
 		server.socket.close()
 
 if __name__ == '__main__':
-	main()	
+	main()
