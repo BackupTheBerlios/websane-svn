@@ -67,7 +67,8 @@ def main():
 	print 'closed file'
 	f=fh.loadFile('kissa')
 	print f.read()
-	
+	f.close()
+	fd.deleteFile('kissa')
 	
 if __name__ == '__main__':
 	main()

@@ -194,6 +194,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 			
 			scanhandler.set_preview_rotation(string.atoi(values['rotation']))
 			scanhandler.update_preview(previewfile)
+			#Should we redirect 303 instead? Probably.
 			self.path=extbase+'/demo.html'
 
 		#Handle a scan
@@ -228,21 +229,24 @@ class ReqHandler(BaseHTTPRequestHandler):
 		elif values['action']=='delete_all':
 			filehandler.deleteAllFiles()
 			xmlhandler.setFiles(filehandler.getFilenames())
+			#Should we redirect 303 instead? Probably.
 			self.path=extbase+'/demo.html'
 			
 		#DELETE
 		elif values['action']=='delete':
 			filehandler.deleteFile(values['selected_file'])
 			xmlhandler.setFiles(filehandler.getFilenames())
+			#Should we redirect 303 instead? Probably.
 			self.path=extbase+'/demo.html'
 		#VIEW
 		elif values['action']=='view':
 			print "Not implemented"
+			#Should we redirect 303 instead? Probably.
 			self.path=extbase+'/viewer.html'
 		#DOWNLOAD
 		elif values['action']=='download':
-			#FIXME: We should do a redirection
-			self.path=extbase+'/storedfiles/'+values['selected_file']
+			self.redirect('/storedfiles/'+values['selected_file'])
+			
 		#Error, print some debugging info
 		else:
 			print "No/unknown action value returned:",str(values)
@@ -250,7 +254,12 @@ class ReqHandler(BaseHTTPRequestHandler):
 		
 		xmlhandler.updateValues(values)		
 		return False
-
+	
+	def redirect(self, location):
+		self.send_response(303)
+		self.send_header('Location:',location)
+		self.end_headers()
+	
 def main():
 	try:
 	
