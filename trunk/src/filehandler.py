@@ -23,6 +23,24 @@ import tempfile
 
 class FileHandler:
 	openfiles={}
+	prevfile=None
+	prevfileupdated=False
+	
+	def createPreviewFile(self):
+		self.prevfileupdated=False
+		if self.prevfile!=None:
+			self.prevfile.close()
+		self.prevfile=TemporaryFile('w+b',-1,'','websane_preview_')
+		return self.prevfile
+	
+	def doneUpdatingPreviewFile(self):
+		self.prevfileupdated=True
+		
+	def getPreviewFile(self):
+		if self.prevfileupdated
+			return self.prevfile
+		else 
+			raise IOError
 	
 	def getFilenames(self):
 		return self.openfiles.keys()

@@ -38,7 +38,6 @@ scanhandler = scanhandler.ScanHandler()
 config.read('webserver.cfg')
 extbase=config.get('general','externalbasepath')
 basepath=config.get('general','webserverbase')
-previewfile=config.get('general','previewfile')
 xmlhandler=xmlhandler.XMLHandler('../demo/demo.html')
 filehandler=filehandler.FileHandler()
 
@@ -102,7 +101,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 			#We replace preview.png with the preview file.
 			elif self.path==extbase+'/preview.png':
 				try: 
-					f=open(previewfile)
+					scanhandler.getPreviewFile()
 				except IOError:
 					f=open(basepath+self.path)
 
@@ -208,7 +207,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 			
 			
 			scanhandler.set_preview_rotation(string.atoi(values['rotation']))
-			scanhandler.update_preview(previewfile)
+			scanhandler.update_preview(filehandler.createPreviewFile())
+			filehandler.doneUpdatingPreviewFile()
 			self.redirect('demo.html')
 		#SCAN
 		elif values['action'] == 'scan':
