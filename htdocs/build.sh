@@ -21,6 +21,6 @@ fi
 if [ ! -L "build.sh" ]
 then
 	rm build.sh
-	ln htdocs/build.sh ./build.sh
+	ln -s htdocs/build.sh ./build.sh
 fi
 
