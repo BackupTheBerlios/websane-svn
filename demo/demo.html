@@ -1,21 +1,30 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-	<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> -->
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>WebSANE</title>
 
 	<link href="style/css/default.css" rel="stylesheet" type="text/css" />
-	<link href="style/css/box.css" rel="stylesheet" type="text/css" />
-	<link href="style/css/preview.css" rel="stylesheet" type="text/css" />
-	<link href="style/css/control.css" rel="stylesheet" type="text/css" />
-	<link href="style/css/outputbox.css" rel="stylesheet" type="text/css" />
-	<link href="style/css/layout.css" rel="stylesheet" type="text/css" />
+	<link href="style/css/box.css" rel="stylesheet" type="text/css"/>
+	<link href="style/css/preview.css" rel="stylesheet" type="text/css"/>
+	<link href="style/css/control.css" rel="stylesheet" type="text/css"/>
+	<link href="style/css/outputbox.css" rel="stylesheet" type="text/css"/>
+	<link href="style/css/layout.css" rel="stylesheet" type="text/css"/>
 
+<!--
+<style type="text/css">
+@import url('style/css/default.css')
+@import url('style/css/box.css')
+@import url('style/css/preview.css')
+@import url('style/css/control.css')
+@import url('style/css/outputbox.css')
+@import url('style/css/layout.css')
+</style>
+-->
 	<!-- Must have separate start and end tags or IE chokes (*grumble* fucking IE..) -->
-	<script src="style/js/selection.js" type="text/javascript"></script>
-	<script src="style/js/control.js" type="text/javascript"></script>
-	<script src="style/js/output.js" type="text/javascript"></script>
+	<script src="style/js/selection.js" type="text/javascript"> </script>
+	<script src="style/js/control.js" type="text/javascript"> </script>
+	<script src="style/js/output.js" type="text/javascript"> </script>
     
 	
 	<link rel="icon" href="style/images/tmp.ico" type="image/ico" />
@@ -29,10 +38,12 @@
 <form id="big_form" action="demo.html" method="post">
 
 <div class="toppane" id="header">
+	<input type="hidden" name="action" value="" id="actionelement" />
+
 	<table>
 	<tr>
 	<td class="h1">WebSANE</td>
-	<td class="version">Version: 0.1.0</td>
+	<td class="version">Version: 1.0.0</td>
 	</tr>
 	</table>
 </div>
@@ -41,44 +52,54 @@
 <div id="leftpane">
 		
 	<!-- Image type box -->
-	<div class="box">
+	<div class="box" id="image_type">
 		<div class="box_title">Image type</div>
 		<div class="box_content">
-			<label><input type="radio" value="COLOR" name="imgtype" checked="checked" />Color</label><br />
+			<label><input checked="checked" type="radio" value="COLOR" name="imgtype" />Color</label><br />
 			<label><input type="radio" value="GRAY" name="imgtype" />Grayscale</label><br />
 			<label><input type="radio" value="BW" name="imgtype" />Black&amp;White</label><br />
 		</div>
 	</div>
-	
-	<!-- Brightness and contrast (not implemented) -->
-	<div class="box hidden">
+	<!-- Rotation -->
+	<div class="box" id="rotation">
+		<div class="box_title">Rotation</div>
+		<div class="box_content">
+			<label><input checked="checked" type="radio" value="0" name="rotation" />None</label><br />
+			<label><input type="radio" value="270" name="rotation" />90&deg; clockwise</label><br />
+			<label><input type="radio" value="90" name="rotation" />90&deg; counter-clockwise</label><br />
+			<label><input type="radio" value="180" name="rotation" />180&deg;</label><br />
+		</div>
+	</div>
+	<!-- Brightness and contrast -->
+	<div class="box" id="levels">
 		<div class="box_title">Levels</div>
 		<div class="box_content">
 			<div id='brightness' class="control" >
 				<div class="control_label"><label for="brightness_box">Brightness</label></div>
 				<div class="control_container" id="brightness_control">
 					<div class="control_bar">
-						<div class="control_float" id="brightness_float" onmousedown="javascript:startcontrol(event,'brightness_control','brightness_box');" ></div>
+						<div class="control_float" id="brightness_float" onmousedown="javascript:startcontrol(event,'brightness_control','brightness_box');" > </div>
 					</div>
 				</div>
 				<div class="control_info">
-					<input type="text" name="brightness" class="form_info" id="brightness_box" value="20%" />
+					<input type="text" name="brightness" class="form_info" id="brightness_box" value="0" />
 				</div>
 			</div>
 			<div id='contrast' class="control" >
 				<div class="control_label"><label for="contrast_box">Contrast</label></div>
 				<div class="control_container" id="contrast_control">
 					<div class="control_bar">
-						<div class="control_float" id="contrast_float" onmousedown="javascript:startcontrol(event,'contrast_control','contrast_box');"></div>
+						<div class="control_float" id="contrast_float" onmousedown="javascript:startcontrol(event,'contrast_control','contrast_box');"> </div>
 					</div>
 				</div>
 				<div class="control_info">
-					<input type="text" name="contrast" class="form_info" id="contrast_box" value="50%" />
+					<input type="text" name="contrast" class="form_info" id="contrast_box" value="0" />
 				</div>
 			</div>
 		</div>
 		
 	</div>
+	<!-- Output -->
 	<div class="box">
 		<div class="box_title">Output</div>
 		
@@ -86,6 +107,7 @@
 			<table>
 				<tr><td class="groupBegin">Resolution (dpi):</td><td class="groupBegin">
 					<select name="resolution" class="dropbox" onchange="javascript:toggleOther(event);">
+						<option selected="selected" value="100">100</option>
 						<option value="200">200</option>
 						<option value="300">300</option>
 						<option value="400">400</option>
@@ -95,9 +117,9 @@
 					</select>
 				</td></tr>
 				
-				<tr><td class="groupMember">&nbsp;</td><td class="groupMember"><input type="text" name="custom_resolution" disabled="disabled" class="form_info"/></td></tr>
+				<tr><td class="groupMember">&nbsp;</td><td class="groupMember"><input type="text" name="custom_resolution" disabled="disabled" class="form_info" value=""/></td></tr>
 				
-				<tr class="fileinfo hidden"><td >Filename:</td><td><input type="text" name="filename" class="form_info"/></td></tr>
+				<tr class="fileinfo"><td >Filename:</td><td><input type="text" name="filename" class="form_info" value=""/></td></tr>
 				<tr class="fileinfo"><td>Filetype:</td><td>
 					<select name="filetype" class="drobox">
 						<option value="PNG">png</option>
@@ -107,39 +129,59 @@
 					</select>
 				</td></tr>
 				
-				<tr class="hidden"><td>View saved:</td><td><input type="checkbox" name="check" class="checkbox" /></td></tr>
+				<tr><td>View directly:</td><td><input type="checkbox" name="before_save" value="view" class="checkbox" /></td></tr>
+				<tr><td></td><td style="text-align: right;"><button type="submit" name="button" value="scan" onclick="document.getElementById('actionelement').value='scan'"><img src="style/images/save.gif" alt="Scan" />Scan</button></td></tr>
 			</table>
 		</div>
 		
 	</div>
 	<div class="buttonarea">
-		<button type="submit" name="button" value="snap"><img src="style/images/scan.gif" alt="Preview" />Refresh preview</button>
-		<button type="submit" name="button" value="scan"><img src="style/images/save.gif" alt="Scan" />Scan</button>
 	</div>
 
 </div> <!--end leftpane -->
 
 
-
-<div class="box" id="centerpane">
-	<div class="box_title">Preview</div>
+<div id="centerpane">
+	<div class="box" style="text-align: right">
+		<div class="box_title">Preview</div>
+		
+		<div class="box_content" onmousedown="javascript:startselection(event);" >
+			<div class="preview" id="preview">
+				<div id="overlay"><div id="selection"> </div></div> <!-- selection div needs separate beginning and end tag or IE and Mozilla will fuck up, and a space so the xml parser wont't fuck up -->
+			</div>	
+		</div>  <!-- end box_content-->
 	
-	<div class="box_content" onmousedown="javascript:startselection(event);" >
-		<div class="preview" id="preview">
-			<div id="overlay"><div id="selection"></div></div> <!-- selection div needs separate beginning and end tag or IE and Mozilla will fuck up -->
+		<button style="margin-right: 1em;margin-bottom: 1em;" type="submit" name="button" value="snap" onclick="document.getElementById('actionelement').value='snap'"><img src="style/images/scan.gif" alt="Preview" />Refresh preview</button>
+		
+		<div class="box_footer" id="selection_info">
+			Left:<input type="text" id="left_coord" name="left" size="3" class="form_info" value="0" onkeypress="changeLeft(event,1);" onblur="applyNewCoords()" />
+			Top:<input type="text" id="top_coord" name="top" size="3" class="form_info" value="0" onkeypress="changeTop(event,1);" onblur="applyNewCoords()" />
+			Width:<input type="text" id="width_coord" name="width" size="3" class="form_info" value="9999" onkeypress="changeWidth(event,1);" onchange="applyNewCoords()"  />
+			Height:<input type="text" id="height_coord" name="height" size="3" class="form_info" value="9999" onkeypress="changeHeight(event,1);" onchange="applyNewCoords()" />
+		</div>	
+	</div><!--End box-->
+	
+	<div class="box">
+		<div class="box_title">Files</div>
+		<div class="box_content" style="text-align: right">
+			<select name="selected_file" size="5" style="display: block; width: 100%">
+				<option style="background: #f8f8f8" value="kissa.png">cat.png</option>
+				<option value="koira.png">dog.png</option>
+				<option style="background: #f8f8f8" value="1">paper.jpeg</option>
+				<option value="1">fly.png</option>
+				<option style="background: #f8f8f8" value="1">old.gif</option>
+				<option value="1">bird.png</option>
+				<option style="background: #f8f8f8" value="1">mo.png</option>
+				<option value="1">mkv.bmp</option>
+			</select>
+			<button type="submit" name="button" value="delete_all" onclick="document.getElementById('actionelement').value='delete_all'"><!--<img src="style/images/delete_all.gif" alt="" />-->Delete all</button>
+			<button type="submit" name="button" value="delete" onclick="document.getElementById('actionelement').value='delete'"><!--<img src="style/images/delete.gif" alt="" />-->Delete</button>
+			<button type="submit" name="button" value="view" onclick="document.getElementById('actionelement').value='view'"><!--<img src="style/images/view.gif" alt="" />-->View</button>
+			<button type="submit" name="button" value="download" onclick="document.getElementById('actionelement').value='download'"><!--<img src="style/images/download.gif" alt="" />-->Download</button>
 		</div>
-	</div>  <!-- end box_content-->
-
-	<div class="box_footer" id="selection_info">
-			Left:<input type="text" id="left_coord" name="left" size="3" class="form_info" value="20" onkeypress="changeLeft(event,1);" onblur="applyNewCoords()" />
-			Top:<input type="text" id="top_coord" name="top" size="3" class="form_info" value="50" onkeypress="changeTop(event,1);" onblur="applyNewCoords()" />
-			Width:<input type="text" id="width_coord" name="width" size="3" class="form_info" value="100" onkeypress="changeWidth(event,1);" onchange="applyNewCoords()"  />
-			Height:<input type="text" id="height_coord" name="height" size="3" class="form_info" value="200" onkeypress="changeHeight(event,1);" onchange="applyNewCoords()" />
 	</div>
-
-
-</div><!--End box--><!--End centerpane-->
-
+	
+</div><!--End centerpane-->
 
 
 </form>
