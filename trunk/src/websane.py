@@ -20,9 +20,7 @@ import string
 import sys
 import cgi
 import urllib
-#from xml.dom.ext import PrettyPrint
-#from xml.dom import implementation
-#from xml.dom.ext.reader import Sax2
+from xml.dom.minidom import parse
 import ConfigParser
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
@@ -102,18 +100,18 @@ class ReqHandler(BaseHTTPRequestHandler):
 				scanhandler.scan_and_save(self.wfile, 'PNG')
 				
 			#FIXME!
-#			elif self.path.endswith('.xhtml'):
-#				f=open(basepath+self.path)
-#				self.send_response(200)
-#				self.send_header('Content-type','text/html')
-#				self.end_headers()
-#				
-#				reader = Sax2.Reader()
-#				doc=reader.fromStream(f)
-#				PrettyPrint(doc,self.wfile)
-#				
-#				f.close()
-#			
+			elif self.path.endswith('.xhtml'):
+				print 'Opening xml file'
+				f=open(basepath+'/demo.html')
+				self.send_response(200)
+				self.send_header('Content-type','text/html')
+				self.end_headers()
+				
+				dom=parse(f)
+				self.wfile.write(dom.toxml('UTF8'))
+				dom.unlink() #Clean up
+				f.close()
+			
 			#Used for debugging. Displays info about scanner.
 			elif self.path==extbase+'/info':
 				self.sendHeaders('text/plain')

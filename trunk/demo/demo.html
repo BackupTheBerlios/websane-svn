@@ -13,9 +13,9 @@
 	<link href="style/css/layout.css" rel="stylesheet" type="text/css" />
 
 	<!-- Must have separate start and end tags or IE chokes (*grumble* fucking IE..) -->
-	<script src="style/js/selection.js" type="text/javascript"></script>
-	<script src="style/js/control.js" type="text/javascript"></script>
-	<script src="style/js/output.js" type="text/javascript"></script>
+	<script src="style/js/selection.js" type="text/javascript"> </script>
+	<script src="style/js/control.js" type="text/javascript"> </script>
+	<script src="style/js/output.js" type="text/javascript"> </script>
     
 	
 	<link rel="icon" href="style/images/tmp.ico" type="image/ico" />
@@ -67,7 +67,7 @@
 				<div class="control_label"><label for="brightness_box">Brightness</label></div>
 				<div class="control_container" id="brightness_control">
 					<div class="control_bar">
-						<div class="control_float" id="brightness_float" onmousedown="javascript:startcontrol(event,'brightness_control','brightness_box');" ></div>
+						<div class="control_float" id="brightness_float" onmousedown="javascript:startcontrol(event,'brightness_control','brightness_box');" > </div>
 					</div>
 				</div>
 				<div class="control_info">
@@ -78,7 +78,7 @@
 				<div class="control_label"><label for="contrast_box">Contrast</label></div>
 				<div class="control_container" id="contrast_control">
 					<div class="control_bar">
-						<div class="control_float" id="contrast_float" onmousedown="javascript:startcontrol(event,'contrast_control','contrast_box');"></div>
+						<div class="control_float" id="contrast_float" onmousedown="javascript:startcontrol(event,'contrast_control','contrast_box');"> </div>
 					</div>
 				</div>
 				<div class="control_info">
@@ -137,15 +137,15 @@
 	
 	<div class="box_content" onmousedown="javascript:startselection(event);" >
 		<div class="preview" id="preview">
-			<div id="overlay"><div id="selection"></div></div> <!-- selection div needs separate beginning and end tag or IE and Mozilla will fuck up -->
+			<div id="overlay"><div id="selection"> </div></div> <!-- selection div needs separate beginning and end tag or IE and Mozilla will fuck up, and a space so the xml parser wont't fuck up -->
 		</div>
 	</div>  <!-- end box_content-->
 
 	<div class="box_footer" id="selection_info">
-			Left:<input type="text" id="left_coord" name="left" size="3" class="form_info" value="20" onkeypress="changeLeft(event,1);" onblur="applyNewCoords()" />
-			Top:<input type="text" id="top_coord" name="top" size="3" class="form_info" value="50" onkeypress="changeTop(event,1);" onblur="applyNewCoords()" />
-			Width:<input type="text" id="width_coord" name="width" size="3" class="form_info" value="100" onkeypress="changeWidth(event,1);" onchange="applyNewCoords()"  />
-			Height:<input type="text" id="height_coord" name="height" size="3" class="form_info" value="200" onkeypress="changeHeight(event,1);" onchange="applyNewCoords()" />
+		Left:<input type="text" id="left_coord" name="left" size="3" class="form_info" value="20" onkeypress="changeLeft(event,1);" onblur="applyNewCoords()" />
+		Top:<input type="text" id="top_coord" name="top" size="3" class="form_info" value="50" onkeypress="changeTop(event,1);" onblur="applyNewCoords()" />
+		Width:<input type="text" id="width_coord" name="width" size="3" class="form_info" value="100" onkeypress="changeWidth(event,1);" onchange="applyNewCoords()"  />
+		Height:<input type="text" id="height_coord" name="height" size="3" class="form_info" value="200" onkeypress="changeHeight(event,1);" onchange="applyNewCoords()" />
 	</div>
 
 
