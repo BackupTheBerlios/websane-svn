@@ -29,6 +29,9 @@
 .state_Closed {
 	color: #ccc;
 }
+.state_Closed a, .state_Closed a:visited {
+	color: #bbb;
+}
 .tasks {
 	padding-left: 1em;
 }

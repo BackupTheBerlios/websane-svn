@@ -40,17 +40,21 @@
 	</xsl:template>
 	
 	<xsl:template match="task">
+		<xsl:variable name="taskURL">
+			http://developer.berlios.de/pm/task.php?func=detailtask&amp;project_task_id=<xsl:value-of select="@id" />&amp;group_id=<xsl:value-of select="../group_id" />&amp;group_project_id=<xsl:value-of select="../@id" />
+		</xsl:variable>
 		<div>
 			<xsl:attribute name="class">taskbox state_<xsl:apply-templates select="status_id" mode="getStatusName" /></xsl:attribute>
 			<table class="task">
 				<tr>
-					<td class="task_title"><xsl:value-of select="summary" /></td>
+					<td class="task_title">
+						<a href="{$taskURL}"><xsl:value-of select="summary" /></a>
+					</td>
 					<td>
 						Assigned to: 
 						<xsl:for-each select="assigned_to" > 
 							<xsl:value-of select="@name" />
-							<xsl:if test="position()!=last()">, </xsl:if>
-								
+							<xsl:if test="position()!=last()">, </xsl:if><!-- Last name doesn't get a comment after it-->
 						</xsl:for-each> 
 					</td>
 				</tr><tr>
