@@ -15,6 +15,14 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+'''
+Todo: 
+
+ Later:
+  - It should be able to modify all settings like a dictionary
+
+'''
+
 
 from xml.dom.minidom import parse
 import ConfigParser
@@ -46,7 +54,7 @@ class XMLHandler:
 			if input.attributes['name'].value=='brightness':
 				input.setAttribute('value',brightness)
 
-	def setContrast(self,brightness):
+	def setContrast(self,contrast):
 		for input in self.dom.getElementsByTagName('input'):
 			if input.attributes['name'].value=='contrast':
 				input.setAttribute('value',contrast)
@@ -59,26 +67,32 @@ class XMLHandler:
 			elif input.attributes['name'].value=='top':
 				input.setAttribute('value',top)
 			elif input.attributes['name'].value=='width':
-				input.setAttribute('value',height)
+				input.setAttribute('value',width)
 			elif input.attributes['name'].value=='height':
 				input.setAttribute('value',height)
 
 	def setRotation(self,rottoset):
 		for input in self.dom.getElementsByTagName('input'):
-			if input.attributes['name'].value=='rotation' and input.attributes['value'].value==rottoset:
-				input.setAttribute('checked','checked')
+			if input.attributes['name'].value=='rotation':
+				if input.attributes['value'].value==rottoset:
+					input.setAttribute('checked','checked')
+				elif input.getAttributeNode('checked')!=None:
+					input.removeAttribute('checked')
 
 	def setImageMode(self,mode):
 		for input in self.dom.getElementsByTagName('input'):
-			if input.attributes['name'].value=='rotation' and input.attributes['value'].value==mode:
-				input.setAttribute('checked','checked')
+			if input.attributes['name'].value=='imgtype':
+				if input.attributes['value'].value==mode:
+					input.setAttribute('checked','checked')
+				elif input.getAttributeNode('checked') != None:
+					input.removeAttribute('checked')
 
 	def getDocument(self):
 		return self.dom.toxml('UTF8')
 	
 	def updateValues(self,values):
 		self.setBounds(values['left'],values['top'],values['width'],values['height'])
-		self.setImageMode(values['imgmode'])
+		self.setImageMode(values['imgtype'])
 		self.setContrast(values['contrast'])
 		self.setBrightness(values['brightness'])
 		self.setRotation(values['rotation'])
@@ -86,8 +100,9 @@ class XMLHandler:
 	def __init__(self,filename):
 		t=time()
 		self.dom=parse(filename)
-		for input in self.dom.getElementsByTagName('input'):
-			print input.attributes['name'].value, input.attributes['value'].value
+
+		#for input in self.dom.getElementsByTagName('input'):
+		#	print input.attributes['name'].value, input.attributes['value'].value
 
 		print "Opening and parsing XML document done. Took",time()-t,"seconds."
 			
