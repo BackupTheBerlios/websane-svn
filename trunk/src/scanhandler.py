@@ -23,6 +23,14 @@ from time import time
 
 
 class ScanHandler:
+	SANE_CAP_SOFT_SELECT=1
+	SANE_CAP_HARD_SELECT=2
+	SANE_CAP_SOFT_DETECT=4
+	SANE_CAP_EMULATED=8
+	SANE_CAP_AUTOMATIC=16
+	SANE_CAP_INACTIVE=32
+	SANE_CAP_ADVANCED=64
+	
 	scanner=None
 	scannerdev=None
 	rotation=0
