@@ -25,6 +25,7 @@ from time import time
 class ScanHandler:
 	scanner=None
 	scannerdev=None
+	rotation=0
 	
 	config = ConfigParser.ConfigParser()
 
@@ -34,8 +35,6 @@ class ScanHandler:
 	
 	#Updates the preview file.
 	def update_preview(self, previewfile):
-		self.reset_settings()
-
 		self.scanner.quality_cal=False
 		self.scanner.depth=4
 		self.scanner.resolution=self.previewres
@@ -56,13 +55,18 @@ class ScanHandler:
 		t=time()
 		im=scanner.snap()
 		print 'Scanning image took ',time()-t,'seconds'
-
+		
+		t=time()
+		im=im.rotate(self.rotation)
+		print 'Rotating image took ',time()-t,'seconds'
+		
 		t=time()
 		im.save(file, imgtype)
 		print 'Converting and saving image took ',time()-t,'seconds\n'
 	
 
 	def reset_settings(self):
+		self.rotate=0
 		t=time()
 		self.scanner=sane.open(self.scannerdev)
 		print 'Opening the selected device took ', time()-t,'seconds'
@@ -83,6 +87,9 @@ class ScanHandler:
 		self.scanner.tl_y=string.atof(y_px) * self.mmperinch / previewres
 		self.scanner.br_x=self.scanner.tl_x + string.atoi(width_px) * self.mmperinch / previewres
 		self.scanner.br_y=self.scanner.tl_y + string.atoi(height_px) * self.mmperinch / previewres
+	
+	def set_rotation(self, rotation):
+		self.rotation=rotation
 	
 	def set_resolution(self, resolution):
 		self.scanner.resolution=string.atof(resolution)

@@ -61,13 +61,16 @@ class ReqHandler(BaseHTTPRequestHandler):
 				
 				#Handle a refresh of the preview
 				if values['action'] == 'snap':
+					scanhandler.reset_settings()
+					scanhandler.set_mode(values['imgtype'])
+					scanhandler.set_rotation(string.atoi(values['rotation']))
 					scanhandler.update_preview(previewfile)
 					self.path=extbase+'/demo.html'
 				#Handle a scan
 				elif values['action'] == 'scan':
 					self.sendHeaders('image/png')
-									
 					scanhandler.reset_settings()
+					
 					
 					scanhandler.set_mode(values['imgtype'])
 					
@@ -77,7 +80,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 						scanhandler.set_resolution(string.atof(values['resolution']))
 					
 					scanhandler.set_scan_bounds_from_preview(values['left'],values['top'],values['width'],values['height'])
-					
+					scanhandler.set_rotation(string.atoi(values['rotation']))
 					scanhandler.scan_and_save(self.wfile, values['filetype'])
 					return
 				#Error, print some debugging info
