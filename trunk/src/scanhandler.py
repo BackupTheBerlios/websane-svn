@@ -41,7 +41,7 @@ class ScanHandler:
 		self.scanner.resolution=self.previewres
 		self.scanner.preview=True
 		
-		print 'Resolution',str(scanner.resolution)
+		print 'Resolution',str(self.scanner.resolution)
 		self.scan_and_save(previewfile, 'PNG')
 
 	#Scans a file with the assigned settings and saves it.
@@ -106,7 +106,7 @@ class ScanHandler:
 	def __init__(self):
 		
 		self.config.read("scanner.cfg")
-		previewres=string.atof(self.config.get('general','previewres'))
+		self.previewres=string.atof(self.config.get('general','previewres'))
 		print "Reading config file done"
 
 		t=time()

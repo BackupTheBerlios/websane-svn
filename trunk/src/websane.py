@@ -43,10 +43,10 @@ pheight=19475988/magicint #pheight is the height of the page in mm. Not used.
 config = ConfigParser.ConfigParser()
 scanhandler = scanhandler.ScanHandler()
 
-config.read("webserver.cfg")
-extbase=config('general','externalbasepath')
-basepath=config('general','webserverbase')
-previewfile=config('general','previewfile')
+config.read('webserver.cfg')
+extbase=config.get('general','externalbasepath')
+basepath=config.get('general','webserverbase')
+previewfile=config.get('general','previewfile')
 
 class ReqHandler(BaseHTTPRequestHandler):
 
@@ -76,7 +76,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 					else:
 						scanhandler.set_resolution(string.atof(values['resolution']))
 					
-					scanhandler.set_scan_bounds_from_preview(values['left'],values['top'],values['width_px'],values['height_px'])
+					scanhandler.set_scan_bounds_from_preview(values['left'],values['top'],values['width'],values['height'])
 					
 					scanhandler.scan_and_save(self.wfile, values['filetype'])
 					return
