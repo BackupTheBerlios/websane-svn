@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-type" content="text/html; charset=utf8" />
 	<title>WebSANE</title>
 
 	<link href="style/css/default.css" rel="stylesheet" type="text/css" />
@@ -26,6 +26,8 @@
 <body onload="javascript:initControl('brightness_box', 'brightness_float');setSelectionConstants(); initControl('contrast_box', 'contrast_float');">
 
 <form id="big_form" action="demo.html" method="post">
+<input type="hidden" name="action" value="" id="actionelement" />
+
 
 <div class="toppane" id="header">
 	<table>
@@ -117,7 +119,7 @@
 					</select>
 				</td></tr>
 				
-				<tr><td>Download directly:</td><td><input type="checkbox" name="before_save" value="send" class="checkbox" /></td></tr>
+				<tr><td>View directly:</td><td><input type="checkbox" name="before_save" value="view" class="checkbox" /></td></tr>
 				<tr><td></td><td style="text-align: right;"><button type="submit" name="button" value="scan" onclick="document.getElementById('actionelement').value='scan'"><img src="style/images/save.gif" alt="Scan" />Scan</button></td></tr>
 			</table>
 		</div>
@@ -172,7 +174,6 @@
 </div><!--End centerpane-->
 
 
-<input type="hidden" name="action" value="" id="actionelement" />
 </form>
 
 <div id="footer">

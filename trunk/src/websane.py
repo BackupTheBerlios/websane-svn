@@ -19,6 +19,7 @@
 import string
 import sys
 import cgi
+from urllib import unquote
 import urllib
 import ConfigParser
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
@@ -51,23 +52,34 @@ class ReqHandler(BaseHTTPRequestHandler):
 			#If the path contains a ? then we should parse it and scan and stuff
 			if self.path.find('?')!=-1:
 				pathlist, values = self.urlParse(self.path)
-				if self.handleActions(values):
-					return
+				self.handleActions(values)
 
-			if self.path.startswith(extbase+'/storedfiles/'):
+			elif self.path.startswith(extbase+'/viewfile/'):
 				path, values=self.urlParse(self.path)
 				print "Looking for stored file"
-				if filehandler.exists(path[-1]):
+				if filehandler.exists(unquote(path[-1])):
+					print 'It seems the stored file exists'
+					self.sendHeaders(self.getContentType(unquote(path[-1])))
+					self.wfile.write( filehandler.loadFile(unquote(path[-1])).read() )
+					print 'File sent'
+				else:
+					print "stored file not found"
+					raise IOError
+
+			elif self.path.startswith(extbase+'/storedfiles/'):
+				path, values=self.urlParse(self.path)
+				print "Looking for stored file"
+				if filehandler.exists(unquote(path[-1])):
 					print 'It seems the stored file exists'
 					self.sendHeaders('application/octet-stream')
-					self.wfile.write( filehandler.loadFile(path[-1]).read() )
+					self.wfile.write( filehandler.loadFile(unquote(path[-1])).read() )
 					print 'File sent'
 				else:
 					print "stored file not found"
 					raise IOError
 
 			elif self.path==extbase+'/demo.html':
-				self.sendHeaders('text/html')
+				self.sendHeaders('text/html; charset="UTF-8"')
 				self.wfile.write(xmlhandler.getDocument())
 							
 			#Snap a preview image and send it directly to the browser
@@ -137,13 +149,16 @@ class ReqHandler(BaseHTTPRequestHandler):
 		self.do_GET()
 	
 	#Maps extensions to mime types
-	def getContentType(self):
-		extension = string.split(self.path,'.')[-1]
+	def getContentType(self,filename=None):
+		if filename==None:
+			filename=self.path
+
+		extension = string.split(filename,'.')[-1]
 		try:
 			return config.get('mimetypes', extension)
 		except NoOptionError:
 			return
-
+	
 	def sendHeaders(self, conttype):
 		self.send_response(200)
 		self.send_header('Content-type',conttype)
@@ -182,7 +197,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 
 	'''Returns true if done, false if more is needed'''
 	def handleActions(self,values):
-		#Handle a refresh of the preview
+		#SNAP
 		if values['action'] == 'snap':
 			scanhandler.reset_settings()
 			scanhandler.set_mode(values['imgtype'])
@@ -194,10 +209,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 			
 			scanhandler.set_preview_rotation(string.atoi(values['rotation']))
 			scanhandler.update_preview(previewfile)
-			#Should we redirect 303 instead? Probably.
-			self.path=extbase+'/demo.html'
-
-		#Handle a scan
+			self.redirect('demo.html')
+		#SCAN
 		elif values['action'] == 'scan':
 			scanhandler.reset_settings()
 			
@@ -214,50 +227,42 @@ class ReqHandler(BaseHTTPRequestHandler):
 			
 			scanhandler.set_scan_bounds_from_preview(values['left'],values['top'],values['width'],values['height'],values['rotation'])
 			
-			#if values['before_save']==send:
-			#	self.sendHeaders('application/octet-stream')
-			#	scanhandler.scan_and_save(self.wfile,values['filetype'])
-			#	return True
-			#else:
-			scanhandler.scan_and_save(filehandler.createFile(values['filename']), values['filetype'])
-			
+			if values.has_key('before_save'):
+				if values['before_save']=='view':
+					scanhandler.scan_and_save(filehandler.createFile(values['filename']), values['filetype'])
+					xmlhandler.setFiles(filehandler.getFilenames())
+					self.redirect('viewfile/'+values['filename'])	
+					return			
+
+			scanhandler.scan_and_save(filehandler.createFile(values['filename']), values['filetype'])	
 			xmlhandler.setFiles(filehandler.getFilenames())
-			self.path=extbase+'/demo.html'			
-			
-		
+			self.redirect('demo.html')
 		#DELETE_ALL
 		elif values['action']=='delete_all':
 			filehandler.deleteAllFiles()
 			xmlhandler.setFiles(filehandler.getFilenames())
-			#Should we redirect 303 instead? Probably.
-			self.path=extbase+'/demo.html'
-			
+			self.redirect('demo.html')
 		#DELETE
 		elif values['action']=='delete':
 			filehandler.deleteFile(values['selected_file'])
 			xmlhandler.setFiles(filehandler.getFilenames())
-			#Should we redirect 303 instead? Probably.
-			self.path=extbase+'/demo.html'
+			self.redirect('demo.html')
 		#VIEW
 		elif values['action']=='view':
-			print "Not implemented"
-			#Should we redirect 303 instead? Probably.
-			self.path=extbase+'/viewer.html'
+			self.redirect('viewfile/'+values['selected_file'])
 		#DOWNLOAD
 		elif values['action']=='download':
-			self.redirect('/storedfiles/'+values['selected_file'])
-			
+			self.redirect('storedfiles/'+values['selected_file'])
 		#Error, print some debugging info
 		else:
 			print "No/unknown action value returned:",str(values)
 			raise IOError
 		
 		xmlhandler.updateValues(values)		
-		return False
 	
 	def redirect(self, location):
 		self.send_response(303)
-		self.send_header('Location:',location)
+		self.send_header('Location',location)
 		self.end_headers()
 	
 def main():
@@ -267,7 +272,7 @@ def main():
 		
 		if not scanhandler.supports_brightness_and_contrast() :
 			xmlhandler.hideBox('levels')
-
+		xmlhandler.setFiles(filehandler.getFilenames())
 		print 'Webserver started. Serving until keyboard interrupt received (ctrl+c)'
 		server.serve_forever()
 		

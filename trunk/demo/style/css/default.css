@@ -64,3 +64,10 @@ button img {
 .hidden {
 	display: none;
 }
+
+.even {
+	background-color: #f6f6f6;
+}
+.odd {
+	background-color: #fff;
+}

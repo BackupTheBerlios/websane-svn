@@ -1,4 +1,4 @@
-# -*- coding: UTF8 -*-
+# -*- coding: UTF-8 -*-
 # Copyright (C) 2005: Mikko Virkkilä
 #
 # This program is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ class XMLHandler:
 	select={		"filetype":"PNG",
 					"resolution":"200"}
 
-
+	#FIXME: Assumes div
 	def hideBox(self, boxId):
 		for input in self.dom.getElementsByTagName('div'):
 			if input.getAttributeNode('id') != None:
@@ -95,7 +95,7 @@ class XMLHandler:
 					input.removeAttribute('checked')
 
 	def getDocument(self):
-		return self.dom.toxml('UTF8')
+		return self.dom.toxml('utf-8')
 	
 	def updateValues(self,values):
 		self.setBounds(values['left'],values['top'],values['width'],values['height'])
@@ -107,19 +107,29 @@ class XMLHandler:
 	def setFiles(self,filenames):
 		for select in self.dom.getElementsByTagName('select'):
 			if select.attributes['name'].value=='selected_file':
-				while select.hasChildNodes():
-					select.removeChild(select.lastChild)
+				self.removeChildren(select)
+				i='odd'
 				for filename in filenames:
-					self.addSelectionOption(select,filename,filename)
+					if i=='odd':
+						i='even'
+					else:
+						i='odd'
+	
+					child=self.addChildWithValueAndText(select,'option',filename,filename)
+					child.setAttribute('class',i)
 				return
 		print "Fucked at creating file list"	
 	
-	def addSelectionOption(self,selection,value,text):
-		a = self.dom.createElement('option')
-		a.setAttribute('value',value)
-		a.appendChild(self.dom.createTextNode(text))
-		selection.appendChild(a)
-		
+	def removeChildren(self,element):
+		while element.hasChildNodes():
+			element.removeChild(element.lastChild)
+
+	def addChildWithValueAndText(self,parent,childtag,value,text):
+		a = self.dom.createElement(childtag)
+		a.setAttribute('value',value.decode('utf-8'))
+		a.appendChild(self.dom.createTextNode(text.decode('utf-8')))
+		parent.appendChild(a)
+		return a
 	
 	def __init__(self,filename):
 		t=time()
