@@ -96,11 +96,12 @@ class ReqHandler(BaseHTTPRequestHandler):
 					return
 			
 			if self.path.startswith(extbase+'/storedfiles/'):
-				print "Giving stored file"
-				if filehandler.exists('storedfiles/kuva.png'):
+				path, values=urlparse(self.path)
+				print "Looking for stored file"
+				if filehandler.exists('storedfiles/'+path[-1]):
 					print 'It seems the stored file exists'
 					self.sendHeaders('application/octet-stream')
-					self.wfile.write( filehandler.loadFile('storedfiles/kuva.png').read() )
+					self.wfile.write( filehandler.loadFile('storedfiles/'+path[-1]).read() )
 					print 'File sent'
 				else:
 					print "stored file not found"

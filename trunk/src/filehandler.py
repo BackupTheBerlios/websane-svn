@@ -31,27 +31,20 @@ class FileHandler:
 		
 	def createFile(self,filename):
 		file,path=tempfile.mkstemp('','websane_')
-		self.openfiles[filename]=(file,path)
-		return file
+		file.close() #We want a file object, not a filedescriptor
+		self.openfiles[filename]=path
+		return open(path)
 		
 	def openFile(self,filename):
-		f,p=self.openfiles[filename]
-		if not f.closed:
-			print "The file hasn't been closed!"
-			raise IOError
-		else
-			self.openfiles[filename]=(open(p),p)
-			return self.openfiles[filename][0]
+		return open(self.openfiles[filename])
 
 	def deleteFile(self, filename):
-		f,p=self.openfiles[filename]
-		if not f.closed:
-			print "Warnign: The file hasn't been closed, unlinking anyway"
+		p=self.openfiles[filename]
 		os.unlink(p)
 		del self.openfiles[filename]
 	
 	def deleteAllFiles(self):
-		for f,p in self.openfiles:
+		for p in self.openfiles:
 			deleteFile(p)
 		self.openfiles.clear()
 
