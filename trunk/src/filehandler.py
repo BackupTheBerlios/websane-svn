@@ -30,16 +30,17 @@ class FileHandler:
 		self.prevfileupdated=False
 		if self.prevfile!=None:
 			self.prevfile.close()
-		self.prevfile=TemporaryFile('w+b',-1,'','websane_preview_')
+		self.prevfile=tempfile.TemporaryFile('w+b',-1,'','websane_preview_')
 		return self.prevfile
 	
 	def doneUpdatingPreviewFile(self):
 		self.prevfileupdated=True
 		
 	def getPreviewFile(self):
-		if self.prevfileupdated
+		if self.prevfileupdated:
+			self.prevfile.seek(0)
 			return self.prevfile
-		else 
+		else:
 			raise IOError
 	
 	def getFilenames(self):

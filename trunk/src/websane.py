@@ -28,6 +28,8 @@ import scanhandler
 import xmlhandler
 import filehandler
 
+from time import time
+
 #This is a constant and shouldn't be modified
 mmperinch=25.4
 
@@ -51,6 +53,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 			#If the path contains a ? then we should parse it and scan and stuff
 			if self.path.find('?')!=-1:
 				pathlist, values = self.urlParse(self.path)
+				if not values.has_key('filename'):
+					values['filename']='untitled'+str(int(time()))+'.'+string.lower(values['filetype'])
 				self.handleActions(values)
 
 			elif self.path.startswith(extbase+'/viewfile/'):
@@ -101,13 +105,15 @@ class ReqHandler(BaseHTTPRequestHandler):
 			#We replace preview.png with the preview file.
 			elif self.path==extbase+'/preview.png':
 				try: 
-					scanhandler.getPreviewFile()
+					f=filehandler.getPreviewFile()
+					close=False
 				except IOError:
 					f=open(basepath+self.path)
-
+					close=True
 				self.sendHeaders('image/png')
 				self.wfile.write(f.read())
-				f.close()
+				if close:
+					f.close()
 			#If nothing special was aksed, just serve the file of the specified name
 			else:
 				print basepath+self.path
@@ -154,7 +160,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 
 		extension = string.split(filename,'.')[-1]
 		try:
-			return config.get('mimetypes', extension)
+			return config.get('mimetypes', string.lower(extension))
 		except NoOptionError:
 			return
 	
