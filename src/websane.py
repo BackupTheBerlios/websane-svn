@@ -14,6 +14,9 @@ class ReqHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
 		print "Doing GET"
 		try:
+			if self.path=='/favicon.ico':
+				self.path='/style/images/tmp.ico'
+		
 			if self.path.find('?')!=-1:	#If the path contains a ? then we should parse it and scan and stuff --> http://www.faqts.com/knowledge_base/view.phtml/aid/4373
 				self.send_response(200)
 				self.send_header('Content-type','text/html')
@@ -32,8 +35,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				PrettyPrint(doc,self.wfile)
 				
 				f.close()
-			elif self.path=='/favicon.ico':
-				self.send_error(404, 'No favicon')
+			
 			else:
 				
 				print basepath+self.path
@@ -86,6 +88,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 			return 'text/plain'
 		elif self.path.endswith('.html'):
 			return 'text/html'
+		elif self.path.endswith('.ico'):
+			return 'image/x-icon'
 
 
 
