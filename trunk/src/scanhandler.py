@@ -149,7 +149,12 @@ class ScanHandler:
 		print "Y2:",self.scanner.br_y
 	
 	def supports_brightness_and_contrast(self):
-		return self.option_is_active('brightness') and self.option_is_active('contrast')
+		if self.option_is_active('brightness') and self.option_is_active('contrast'):
+			print "Brightness and contrast are supported"
+			return True
+		else:
+			print "Brightness and contrast are not supported"
+			return False
 
 	def set_brightness_and_contrast(self, brightness,contrast):
 		if (self.supports_brightness_and_contrast()):

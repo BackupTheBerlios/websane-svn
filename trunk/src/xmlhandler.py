@@ -49,6 +49,10 @@ class XMLHandler:
 					"resolution":"200"}
 
 
+	def hideBox(self, boxId):
+		elem=self.getElementById(boxId)
+		input.setAttribute('style',"display: none")
+		
 	def setBrightness(self,brightness):
 		for input in self.dom.getElementsByTagName('input'):
 			if input.attributes['name'].value=='brightness':
@@ -100,7 +104,9 @@ class XMLHandler:
 	def __init__(self,filename):
 		t=time()
 		self.dom=parse(filename)
-
+		root=self.dom.documentElement
+		root.setAttribute("id", "root")
+		root.setIdAttribute('id')
 		#for input in self.dom.getElementsByTagName('input'):
 		#	print input.attributes['name'].value, input.attributes['value'].value
 

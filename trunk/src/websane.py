@@ -209,8 +209,12 @@ def main():
 	
 		server=HTTPServer(('',string.atoi(config.get('general', 'port'))), ReqHandler)
 		
+		if not scanhandler.supports_brightness_and_contrast() :
+			xmlhandler.hideBox('levels')
+
 		print 'Webserver started. Serving until keyboard interrupt received (ctrl+c)'
 		server.serve_forever()
+		
 	except KeyboardInterrupt:
 		print 'Shutting down server'
 		server.socket.close()
