@@ -52,13 +52,15 @@ class ReqHandler(BaseHTTPRequestHandler):
 				
 				#Handle a refresh of the preview
 				if values['action'] == 'snap':
+					xmlhandler.updateValues(values)
 					scanhandler.reset_settings()
 					scanhandler.set_mode(values['imgtype'])
 					
 					scanhandler.set_brightness_and_contrast(
 						string.atoi(values['brightness']),
 						string.atoi(values['contrast']) )
-				
+					
+					
 					scanhandler.set_preview_rotation(string.atoi(values['rotation']))
 					scanhandler.update_preview(previewfile)
 					self.path=extbase+'/demo.html'
@@ -102,9 +104,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 				scanhandler.scan_and_save(self.wfile, 'PNG')
 				
 			#FIXME!
-			elif self.path.endswith('.xhtml'):
+			elif self.path==extbase+'/demo.html'):
 				self.sendHeaders('text/html')
-				xmlhandler.setRotation('180')
 				self.wfile.write(xmlhandler.getDocument())
 							
 			#Used for debugging. Displays info about scanner.
@@ -114,7 +115,11 @@ class ReqHandler(BaseHTTPRequestHandler):
 			
 			#We replace chair.jpg with the preview file.
 			elif self.path==extbase+'/chair.jpg':
-				f=open(previewfile)
+				try: 
+					f=open(previewfile)
+				except IOError:
+					f=open(basepath+self.path)
+
 				self.sendHeaders('image/png')
 				self.wfile.write(f.read())
 				f.close()
@@ -201,7 +206,6 @@ class ReqHandler(BaseHTTPRequestHandler):
 					pass
 		return (pathlist, d)
 
-	
 def main():
 	try:
 	

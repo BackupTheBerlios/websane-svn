@@ -39,16 +39,49 @@ class XMLHandler:
 
 	select={		"filetype":"PNG",
 					"resolution":"200"}
-					
+
+
+	def setBrightness(self,brightness):
+		for input in self.dom.getElementsByTagName('input'):
+			if input.attributes['name'].value=='brightness':
+				input.setAttribute('value',brightness)
+
+	def setContrast(self,brightness):
+		for input in self.dom.getElementsByTagName('input'):
+			if input.attributes['name'].value=='contrast':
+				input.setAttribute('value',contrast)
+
+
+	def setBounds(self,left,top,width,height):
+		for input in self.dom.getElementsByTagName('input'):
+			if input.attributes['name'].value=='left':
+				input.setAttribute('value',left)
+			elif input.attributes['name'].value=='top':
+				input.setAttribute('value',top)
+			elif input.attributes['name'].value=='width':
+				input.setAttribute('value',height)
+			elif input.attributes['name'].value=='height':
+				input.setAttribute('value',height)
+
+	def setRotation(self,rottoset):
+		for input in self.dom.getElementsByTagName('input'):
+			if input.attributes['name'].value=='rotation' and input.attributes['value'].value==rottoset:
+				input.setAttribute('checked','checked')
+
+	def setImageMode(self,mode):
+		for input in self.dom.getElementsByTagName('input'):
+			if input.attributes['name'].value=='rotation' and input.attributes['value'].value==mode:
+				input.setAttribute('checked','checked')
+
 	def getDocument(self):
 		return self.dom.toxml('UTF8')
 	
-	def setRotation(self,rottoset):
-		print "Starting to change rotation"
-		for input in self.dom.getElementsByTagName('input'):
-			if input.attributes['name'].value=='rotation' and input.attributes['value'].value==rottoset:
-				print "Selecting rotation"
-				input.setAttribute('checked','checked')
+	def updateValues(self,values):
+		self.setBounds(values['left'],values['top'],values['width'],values['height'])
+		self.setImageMode(values['imgmode'])
+		self.setContrast(values['contrast'])
+		self.setBrightness(values['brightness'])
+		self.setRotation(values['rotation'])
 	
 	def __init__(self,filename):
 		t=time()
