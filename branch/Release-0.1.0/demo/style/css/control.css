@@ -1,0 +1,75 @@
+/**/
+
+.control {
+/*	background-color: #fe1;*/
+	width: 100%;
+}
+
+#brightness {
+	position:absolute;
+	left: 1em;
+	width: 50%;
+}	
+
+#contrast {
+	width: 50%;
+	padding-left: 50%;
+}
+
+.control_container {
+/*	background-color: #f00;*/
+	height: 100px;
+	width: 30px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.control_bar {
+	margin: 0;
+	padding: 0;
+/*	background-color: #f0f;	*/
+	/*width: 2px;*/
+	/*margin-top: 6px;*/
+		
+	height: 100%;
+/*	border: 1px solid #555;*/
+	background-image: url('../images/scale.gif');
+/*	background-color: #000;*/
+	
+}
+.control_label {
+	text-align: center;
+}
+	
+
+.control_float {
+	/*background-color: #00f;*/
+	position:relative;
+	top: 44px;
+	/*margin-top: -6px; /*Half of height*/
+	/*margin-left: -14px;*/
+	/*top: 44px; *//* (controllerheight - height)/2 */
+	width: 30px;
+	height: 12px;
+	/*background: #000;*/
+	background-image: url(../images/slider.png);
+	background-position: center top;
+	background-repeat: no-repeat;
+	cursor: n-resize;
+}
+.control_info {
+	text-align: center;
+}
+
+.control .form_info {
+	text-align: center;
+	font-size: 0.8em;
+	border: 1px solid #ccc;
+	margin: 3px;
+	width: 3.2em;
+	
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
