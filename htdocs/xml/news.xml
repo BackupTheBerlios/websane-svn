@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<news title="News about WebSANE">
+	<item>
+		<title>Webpage launched</title>
+		<doc>
+			<p>Hello world</p>
+		</doc>
+		<date>2005-02-06</date>
+		<author>Mikko Virkkilä</author>
+	</item>
+</news>
