@@ -61,3 +61,10 @@ http://127.0.0.1:5423/snap
 
 To quickly scan an image you can also use
 http://127.0.0.1:5423/scan
+
+TODO
+----
+There are still several areas that could use more
+polish. For example you can select View even though
+you don't have any file selected. Viewing files
+without extensions also fails.
