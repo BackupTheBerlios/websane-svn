@@ -1,94 +1,34 @@
 <htmlPage title="About the WebSANE project">
 
-
+<h3>About WebSANE</h3>
 <p>
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis vitae
-nunc. Duis tellus lacus, rutrum a, hendrerit id, accumsan ut, orci.
-Pellentesque sed diam. Morbi eros. Mauris a elit elementum turpis
-luctus dapibus. Aliquam posuere. Duis eu dui non erat feugiat
-vulputate. Ut dignissim, libero at malesuada accumsan, turpis dolor
-pellentesque massa, non tincidunt elit urna quis quam. Duis ultrices
-interdum tortor. Vivamus molestie mi in libero. Proin dui. Donec
-hendrerit.
+WebSANE aims to make sharing a scanner to multiple clients easy. In addition
+the clients do not need any special software to operate the scanner remotely, they
+simply point their web browsers to the computer to which the scanner is connected.
 </p>
-<p>Maecenas eros eros, tristique ac, egestas a, varius eget, erat.
-Etiam quis purus et metus placerat dictum. Ut convallis diam eu diam.
-Maecenas porttitor. Phasellus quis dolor. Donec tristique mi et sapien.
-Aenean fringilla libero nec leo. Nulla eu eros pulvinar metus
-scelerisque sodales. Vestibulum viverra mattis metus. Donec porttitor
-ipsum nec magna. Lorem ipsum dolor sit amet, consectetuer adipiscing
-elit. Praesent tempus nibh quis lacus. In vel sem.
+<p>
+At this point there is only a web demo of the interface and the backend which is to be written in 
+php is missing. The frontend currently requires a gecko based browser. The demo also mostly works
+with Internet Explorer 6.
 </p>
-<p>Fusce laoreet, ipsum in consequat venenatis, neque pede euismod
-elit, nec egestas tellus odio quis sapien. Praesent eleifend neque ut
-dui. Vestibulum mauris. Maecenas molestie erat in purus. Proin
-adipiscing elit in arcu. Nulla ligula nisl, mattis sed, facilisis sed,
-pretium ac, libero. Nulla vehicula vehicula ligula. Sed mollis purus ut
-turpis. Ut lacinia velit nec dolor. Vestibulum iaculis.
-</p>
-<p>Integer pulvinar libero. Mauris id nisl et sapien accumsan aliquam.
-Vestibulum lorem. Donec ac quam. Nullam commodo tellus eu sem. Sed
-vestibulum, tortor convallis congue auctor, ante urna pulvinar sem, a
-hendrerit sapien lorem sit amet mauris. Duis tristique, diam sed
-feugiat tincidunt, sapien est semper justo, a dignissim felis velit at
-metus. Aliquam ante elit, accumsan ac, lacinia eget, dapibus sed,
-risus. In orci mauris, tempor sed, cursus a, eleifend et, felis.
-Pellentesque sapien pede, molestie et, egestas nec, lacinia sed, risus.
-Aliquam imperdiet. Pellentesque habitant morbi tristique senectus et
-netus et malesuada fames ac turpis egestas. Vivamus sed tortor. Morbi
-at ipsum. Sed nec justo. Vivamus nec leo in ante volutpat laoreet.
-</p>
-<p>Pellentesque sit amet ligula. Donec vel tellus vel mi nonummy
-molestie. In vulputate. Etiam ultrices posuere nunc. Nunc tristique.
-Vivamus auctor rutrum diam. Suspendisse leo. Suspendisse ut leo eget
-augue consectetuer nonummy. Sed semper rutrum elit. Duis bibendum
-ultricies eros. Cras commodo vehicula turpis. Sed in mi in felis cursus
-lacinia.
-</p>
-<p>In condimentum sagittis nunc. Nulla ut metus. Aenean posuere velit
-sed odio. Ut arcu nunc, sagittis sed, rhoncus eget, interdum vitae,
-nulla. Integer eros urna, adipiscing in, tincidunt semper, pretium eu,
-sapien. Integer et odio. Maecenas eleifend malesuada leo. Pellentesque
-eu felis. Pellentesque dignissim neque ut augue. In quam. Donec quis
-nibh sit amet magna varius aliquam. Phasellus sit amet lacus ac augue
-commodo vestibulum. Maecenas ante. Ut nec orci non dolor semper
-vulputate. Aenean adipiscing molestie tellus.
-</p>
-<p>Nunc aliquet. Proin luctus libero vel massa. Cras vehicula mattis
-est. Curabitur metus mi, feugiat at, rhoncus laoreet, vehicula at,
-turpis. Cras metus. In odio nisl, dignissim ut, condimentum nec,
-scelerisque eu, risus. Quisque pulvinar elementum justo. Maecenas
-molestie. Integer vulputate bibendum quam. Ut leo mauris, porta
-interdum, sodales sit amet, nonummy in, nunc. Morbi posuere. Curabitur
-vitae diam. Nulla viverra. Suspendisse vitae felis.
+<p>
+WebSANE was inspired by the work Gunars Benga did on the <a href="sanewi.sourceforge.net">SANE Web Interface</a> 
+project.
 </p>
 
-<p>Phasellus auctor bibendum massa. Maecenas pulvinar, dolor non
-molestie aliquam, leo metus tempus purus, at molestie est orci quis
-urna. Nam faucibus malesuada urna. Cras posuere quam nec libero.
-Praesent porttitor dui ut enim. Phasellus gravida. Proin gravida justo
-eget massa. Etiam pulvinar. Praesent tincidunt arcu eu mauris. Maecenas
-ornare ante. Etiam ac purus. Aenean mauris. Duis libero tellus,
-ullamcorper quis, pretium non, pellentesque vel, ligula. Phasellus
-pulvinar, dui ac congue blandit, tortor ante egestas dolor, in
-elementum nunc wisi at urna. Donec imperdiet, nisl ut pulvinar tempor,
-metus massa aliquet dui, vel porttitor urna ligula ac quam. Curabitur
-sollicitudin. Ut mi enim, facilisis ac, dictum eget, commodo rutrum,
-nunc.
+<h3>About this site</h3>
+<p>
+The contents of this site are actually in the projects subversion repository. Each page
+is described there in xml and each nigh a script is run that checks for updates. It
+downloads new versions of the xml files and using xmlproc rebuilds the entire site.
 </p>
-<p>Nunc lectus. Quisque sodales placerat orci. Class aptent taciti
-sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos.
-Vestibulum sollicitudin lectus ac nibh. Curabitur justo risus,
-ullamcorper quis, convallis at, interdum et, ipsum. In libero urna,
-gravida quis, lacinia nec, cursus sit amet, lacus. Fusce id nulla in
-sem lacinia tristique. Vivamus nec lacus. Curabitur ac wisi et tortor
-convallis mattis. Aenean et eros a pede sollicitudin condimentum. Duis
-condimentum iaculis ligula. Donec placerat adipiscing purus. Quisque
-faucibus, ipsum sit amet tempus auctor, arcu erat blandit erat, mattis
-pharetra massa ligula nec sem. Praesent rutrum cursus ligula. Duis
-adipiscing. Ut ultrices, quam nec lobortis malesuada, dui urna
-hendrerit lacus, sed condimentum turpis leo at enim. Donec lacinia
-tempor turpis.
+<p>
+For the site maintainers this means that each version of a page will be stored automatically
+and accessible later. It also means that adding links to the sidebar can be easily done and when
+the pages are re-build the link will automagically appear on every page. 
+</p>
+<p>
+All the relevant files can be found in the <a href="website">website directory</a> or in the svn repository.
 </p>
 
 </htmlPage>

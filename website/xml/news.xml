@@ -2,11 +2,38 @@
 
 <news title="News about WebSANE">
 	<item>
-		<title>Webpage launched</title>
+		<title>Website launched</title>
 		<doc>
-			<p>Hello world</p>
+			<p>
+			This website was launced today. The entire site is automagically rebuilt each night from the xml sources in 
+			the subversion repository. A script fetches the subversion sources, and runs xml proc on the xml files using 
+			an xslt stylesheet to create the site. Each part of the site is stored in a separate file that only contains 
+			data. What is to built is written the 
+			<a href="website/xml/site.xml">site.xml</a> 
+			file, and based on that the
+			xslt processor goes through the files and creates menus and links, in essence creates the entire site. 
+			</p>
+			<p>
+			You can find the sources for the builder in our svn repository or simply under the 
+			<a href="website">website directory</a>
+			</p>
 		</doc>
 		<date>2005-02-06</date>
+		<author>Mikko Virkkilä</author>
+	</item>
+	<item>
+		<title>WebSANE was registered on BerliOS</title>
+		<doc>
+			<p>Today the WebSANE project was registered on 
+			<a href="http://www.berlios.de">BerliOS</a>
+			</p>
+			<p>You might be interersted in checking out a 
+			<a href="http://developer.berlios.de/screenshots/?group_id=3028">screenshot</a> 
+			to get an idea what the client
+			will see when using the scanner.
+			</p>
+		</doc>
+		<date>2005-02-04</date>
 		<author>Mikko Virkkilä</author>
 	</item>
 </news>
