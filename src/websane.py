@@ -10,12 +10,19 @@ from xml.dom import implementation
 from xml.dom.ext.reader import Sax2
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
+#Not completely implemented
+extbase='/'
+
+#Path for where the static content is
 basepath='../demo'
+#Preview resolution
 previewres=30.0
+#This is a constant and shouldn't be modified
 inchinmm=25.4
+inchtomm=inchinmm
 
+#Undocumented but very important features
 magicint=65536
-
 pwidth=14149222/magicint
 pheight=19475988/magicint
 
@@ -82,15 +89,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				#Handle a refresh of the preview
 				if values['button'] == 'snap':
 					self.update_preview()
-					f=open(basepath+'/demo.html')
-					self.send_response(200)
-					self.send_header('Content-type','text/html')
-					self.end_headers()
-					reader = Sax2.Reader()
-					doc=reader.fromStream(f)
-					PrettyPrint(doc,self.wfile)
-				
-					f.close()
+					self.path=extbase+'/demo.html'
 				elif values['button'] == 'scan':
 					self.send_response(200)
 					self.send_header('Content-type','image/png')
@@ -111,21 +110,22 @@ class ReqHandler(BaseHTTPRequestHandler):
 					else:
 						scanner.resolution=string.atof(values['resolution'])
 					
-					scanner.tl_x=string.atoi(values['left']) * ( scanner.resolution/previewres )  )
-					scanner.tl_y=string.atoi(values['top']) * ( scanner.resolution/previewres) )
-					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * ( scanner.resolution/previewres) )
-					scanner.br_y=scanner.tl_y + string.atoi(values['height']) * ( scanner.resolution/previewres) )
+					scanner.tl_x=string.atof(values['left']) * inchinmm / previewres 
+					scanner.tl_y=string.atof(values['top']) * inchtomm / previewres
+					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * inchtomm / previewres 
+					scanner.br_y=scanner.tl_y + string.atoi(values['height']) * inchinmm / previewres
 					
 					self.scan_and_save(self.wfile, values['filetype'])
-
+					return
 				else:
 					self.send_response(200)
 					self.send_header('Content-type','text/html')
 					self.end_headers()
 					self.wfile.write("<html><head/><body>Error. Form has no button value. ",str(values),"</body></html>")
+					return
 
 			#Snap a preview image and send it directly to the browser
-			elif self.path=='/snap':
+			if self.path==extbase+'/snap':
 				self.send_response(200)
 				self.send_header('Content-type','image/png')
 				self.end_headers()
@@ -140,7 +140,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				self.scan_and_save(self.wfile, 'PNG')
 
 			#Do a scan and return the image directly to the browser
-			elif self.path=='/scan':
+			elif self.path==extbase+'/scan':
 				self.send_response(200)
 				self.send_header('Content-type','image/png')
 				self.end_headers()
@@ -165,7 +165,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				f.close()
 			
 			#Used for debugging. Displays info about scanner.
-			elif self.path=='/info':
+			elif self.path==extbase+'/info':
 				self.send_response(200)
 				self.send_header('Conent-type','text/plain')
 				self.end_headers()
@@ -177,7 +177,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				self.wfile.write( '\n\nOptions:\n'+str(scanner.get_options()) )
 			
 			#If nothing special was aksed, just serve the file of the specified name
-			elif self.path=='/chair.jpg':
+			elif self.path==extbase+'/chair.jpg':
 				f=open('/tmp/preview.png')
 				self.send_response(200)
 				self.send_header('Content-type','image/png')
