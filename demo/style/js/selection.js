@@ -74,17 +74,12 @@ function startselection(e){
 		startX=e.clientX + document.documentElement.scrollLeft;
 	}
 
-
+	
 
 	newX=startX+1;
 	newY=startY+1;
 	
-	if(mozilla)
-		comp.style.backgroundPosition=frame_left+"px "+frame_top+"px;";
-	else
-		comp.style.backgroundPosition=frame_left+" "+frame_top;
-
-	
+	comp.style.backgroundPosition=frame_left+unit+" "+frame_top+unit;
 	
 		
 	if(getRelX(startX) < 0) { startX=frame_left; }
@@ -168,11 +163,8 @@ function updateCurSelectionCoords(){
 		overlay.style.height=frame_height-relY+unit;
 	}
 
-	if(mozilla)
-		comp.style.backgroundPosition=(-relX) +"px "+(-relY)+"px;";
-	else
-		comp.style.backgroundPosition=(-relX) +" "+(-relY);
-
+	comp.style.backgroundPosition=(-relX) +unit+" "+(-relY)+unit;
+	
 	comp.style.width=cur_width+unit;
 	comp.style.height=cur_height+unit;
 

@@ -56,13 +56,17 @@ function findPosY(obj)
 
 function initControl(toGet, toSet) {	
 	if (window.Event) {
+		/*alert('Mozilla');*/
 		mozilla=true;
-		unit='px;';
+		unit='px'; /*Though mozilla gladly accepts px; khtml doesn't so we just use px*/
 	} else {
+		/*alert('IE');*/
 		mozilla=false;
 		unit='';
 	}
+	
     document.getElementById(toSet).style.top=cont_height-getCurLevel(toGet)-float_half_height+unit;
+    
 }
 
 function startcontrol(e, container, toUpdate){
@@ -84,13 +88,12 @@ function startcontrol(e, container, toUpdate){
 	document.body.onmouseup=endcontrol;
 	container_top=findPosY(cont)+cont_padding;
 	cont.style.cursor='n-resize';
-	/*alert(floater.style.top);*/
+	
 }
 
 function changelevel(e) {
 	var newY;
 	if (mozilla) { 
-        /*alert('mozilla');*/
 		newY=e.pageY-container_top;
 	} else {
 		e = window.event;
