@@ -89,16 +89,11 @@ class ReqHandler(BaseHTTPRequestHandler):
 					PrettyPrint(doc,self.wfile)
 				
 					f.close()
-					return
 				else:
 					self.wfile.write("<html><head/><body>"+str(values)+"</body></html>")
-					return
 
-			
-			
-			
 			#Snap a preview image and send it directly to the browser
-			if self.path=='/snap':
+			elif self.path=='/snap':
 				self.send_response(200)
 				self.send_header('Content-type','image/png')
 				self.end_headers()
@@ -123,7 +118,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				scanner.resolution=300.0
 				
 				self.scan_and_save(self.wfile, 'PNG')
-			
+				
 			#FIXME!
 			elif self.path.endswith('.xhtml'):
 				f=open(basepath+self.path)
@@ -150,6 +145,13 @@ class ReqHandler(BaseHTTPRequestHandler):
 				self.wfile.write( '\n\nOptions:\n'+str(scanner.get_options()) )
 			
 			#If nothing special was aksed, just serve the file of the specified name
+			elif self.path=='/chair.jpg':
+				f=open('/tmp/preview.png')
+				self.send_response(200)
+				self.send_header('Content-type','image/png')
+				self.end_headers()
+				self.wfile.write(f.read())
+				f.close()
 			else:
 				print basepath+self.path
 				f=open(basepath+self.path)
