@@ -10,7 +10,8 @@
 	<xsl:output method="xml" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" indent="yes" omit-xml-declaration="yes" />
 	<xsl:include href="commonBits.xsl" />
 	<xsl:include href="utils.xsl" />
-
+	<xsl:include href="tasks.xsl" />
+	
 	<xsl:template match="/site">
 		Transformation started
 		<xsl:for-each select="page">
@@ -19,14 +20,16 @@
 				<xsl:document href="./{@name}" method="xml" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" indent="yes" omit-xml-declaration="yes">
 					<xsl:apply-templates select="htmlPage" />
 					<xsl:apply-templates select="rss" />
+					<xsl:apply-templates select="tasks" />
 				</xsl:document>
 			</xsl:if>
 		</xsl:for-each>
 		Transformation done
 	</xsl:template>
 	
+
+	
 	<xsl:template match="rss">
-		<!-- See http://developer.berlios.de/feature/index.php?func=detailfeature&feature_id=579&group_id=1 -->
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<xsl:call-template name="createHTMLHead" />
 			<body>

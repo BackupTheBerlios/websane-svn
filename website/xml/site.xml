@@ -12,7 +12,9 @@
 	<page name="plan.html" inmenu="yes" menutitle="Plan" >
 		<xi:include href="plan.xml" />
 	</page>
-	
+	<page name="tasks.html" inmenu="yes" menutitle="Tasks">
+		<xi:include href="task_dump.xml" />
+	</page>
 	<!-- Nodes with no children will just be added as links to the menu-->
 	<page name="http://developer.berlios.de/forum/forum.php?forum_id=9269" inmenu="yes" menutitle="Feedback forum" />
 	<page name="links.html" inmenu="yes" menutitle="Links" >

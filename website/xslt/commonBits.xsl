@@ -21,6 +21,7 @@
 			<link rel="stylesheet" type="text/css" href="style/css/content.css"> </link>
 			<link rel="stylesheet" type="text/css" href="style/css/tail.css"> </link>
 			<link rel="stylesheet" type="text/css" href="style/css/box.css"> </link>
+			<link rel="stylesheet" type="text/css" href="style/css/tasks.css"> </link>
 		</head>
 	</xsl:template>
 	

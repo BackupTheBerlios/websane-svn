@@ -1,36 +1,83 @@
 #!/bin/bash
-
-if [ `pwd|sed 's/.*\///'` = 'website' ] 
-then 
-	echo "Create a symlink in the parent directory and rund from there instead"
+#
+# Script for building the website. 
+#
+# By: Mikko Virkkilä
+# License: GPL
+# 
+if [ -z $1 ]
+then
+	echo "Usage: $0 [options] targetdirectory"
+	echo ""
+	echo "Options:"
+	echo "--checkout		Check out from svn"
+	echo "--noupdate		Don't get update version from subversion"
+	echo "--nobuild		Don't build html pages"
 	exit
 fi
 
-if [ -d "website" ]
+NOUPDATE="FALSE"
+NOBUILD="FALSE"
+CHECKOUT="FALSE"
+#if [ `pwd|sed 's/.*\///'` != 'website' ] 
+#then 
+#	echo "Run script from website directory"
+#	exit
+#fi
+
+for i in $*
+do
+	case $i in
+	--noupdate)
+		NOUPDATE="TRUE"
+		;;
+	--nobuild)
+		NOBUILD="TRUE"
+		;;
+	--checkout)
+		CHECKOUT="TRUE"
+		;;
+	*)
+		TARGETDIR=$i
+		;;
+	esac
+done
+
+
+if [ -z $TARGETDIR ]
+then 
+	if [ $NOBUILD != "TRUE" ]
+	then
+		echo "You must specify a target dir"
+		exit
+	fi
+fi	
+
+
+if [ $CHECKOUT = "TRUE" ]
 then
-	svn update website
-else 
 	svn checkout svn://svn.berlios.de/websane/website
 	chmod a+x website/build.sh
+	cd website
 fi
 
-xsltproc --xinclude website/xslt/builder.xsl website/xml/site.xml
-
-if [ ! -L "style" ] 
+if [ $NOUPDATE != "TRUE" ]
 then
-	echo "Creating symlink for style"
-	ln -s website/style `pwd`/style
-fi
-if [ ! -L "images" ] 
-then
-	echo "Creating symlink for style"
-	ln -s website/images `pwd`/images
-fi
-if [ ! -L "build.sh" ]
-then
-	echo "Removing old build.sh"
-	rm build.sh
-	echo "Symlinkin to new build.sh"
-	ln -s website/build.sh ./build.sh
+	svn update
 fi
 
+if [ $NOBUILD != "TRUE" ]
+then 
+	OLD_DIR=`pwd`
+	cd $TARGETDIR
+	xsltproc --xinclude $OLD_DIR/xslt/builder.xsl $OLD_DIR/xml/site.xml
+	cd $OLD_DIR
+
+	
+	if [ ! -L $TARGETDIR"/style" ] 
+	then
+		echo "Creating symlink for style"
+		ln -s `pwd`/style $TARGETDIR/style
+	fi
+
+fi
