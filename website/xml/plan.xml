@@ -53,8 +53,9 @@ be ungessable and unique (=basedir/timestamp+randomnumbers/imagename.png).
 </ul>
 </p>
 <h3>Goals</h3>
-This are rough and are not attainable for the first release.
+<p>This are rough and are not attainable for the first release.</p>
 <h4>Primary</h4>
+<p>
 <ul>
 <li>Easy to use</li>
 <li>Cross platform and cross browser</li>
@@ -62,7 +63,9 @@ This are rough and are not attainable for the first release.
 <li>Possibility of separating xhtml from backend</li>
 <li>Backend should be configurable</li>
 </ul>
+</p>
 <h4>Secondary</h4>
+<p>
 <ul>
 <li>Help system</li>
 <li>Clear debugging information on server</li>
@@ -70,4 +73,5 @@ This are rough and are not attainable for the first release.
 <li>Scanner specific settings</li>
 <li>Showing more possibilities offered by convert</li>
 </ul>
+</p>
 </htmlPage>
