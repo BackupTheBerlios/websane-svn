@@ -1,5 +1,6 @@
 import string
 import sys
+import cgi
 from xml.dom.ext import PrettyPrint
 from xml.dom import implementation
 from xml.dom.ext.reader import Sax2
@@ -48,7 +49,23 @@ class ReqHandler(BaseHTTPRequestHandler):
 			self.send_error(404, 'IOError')
 			
 	def do_POST(self):
-		print "sinulle on postia!"
+		print self.headers
+		contentype=self.headers.getheader('content-type')
+		if contentype != 'application/x-www-form-urlencoded':
+			print 'Error: Uncexpected content-type: ',contentype
+			return
+		
+		clen = self.headers.getheader('content-length')
+		
+		if clen:
+			clen = string.atoi(clen)
+		else:
+			print 'POST ERROR: missing content-length'
+			return
+		
+		data = self.rfile.read(clen)
+		print "HELLO!"
+		print data
 		return
 
 		
