@@ -11,7 +11,7 @@ from xml.dom.ext.reader import Sax2
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 basepath='../demo'
-
+previewres=30.0
 
 
 class ReqHandler(BaseHTTPRequestHandler):
@@ -44,7 +44,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 
 		scanner.quality_cal=False
 		scanner.depth=4
-		scanner.resolution=30.0
+		scanner.resolution=previewres
 		scanner.preview=True
 		
 		self.scan_and_save('/tmp/preview.png', 'PNG')
@@ -72,25 +72,36 @@ class ReqHandler(BaseHTTPRequestHandler):
 		try:	
 			#If the path contains a ? then we should parse it and scan and stuff --> http://www.faqts.com/knowledge_base/view.phtml/aid/4373		
 			if self.path.find('?')!=-1:
-				self.send_response(200)
-				self.send_header('Content-type','text/html')
-				self.end_headers()
-				
 				pathlist, values = self.urlParse(self.path)
+				
+				#Handle a refresh of the preview
 				if values['button'] == 'snap':
 					self.update_preview()
 					f=open(basepath+'/demo.html')
 					self.send_response(200)
 					self.send_header('Content-type','text/html')
 					self.end_headers()
-				
 					reader = Sax2.Reader()
 					doc=reader.fromStream(f)
 					PrettyPrint(doc,self.wfile)
 				
 					f.close()
+				elif values['button'] == 'scan':
+					self.send_response(200)
+					self.send_header('Content-type','image/png')
+					self.end_headers()
+					
+					scanner=self.get_scanner()
+					
+					scanner.resolution=atof(values['resolution'])
+					
+					self.scan_and_save(self.wfile, values['filetype'])
+
 				else:
-					self.wfile.write("<html><head/><body>"+str(values)+"</body></html>")
+					self.send_response(200)
+					self.send_header('Content-type','text/html')
+					self.end_headers()
+					self.wfile.write("<html><head/><body>Error. Form has no button value. ",str(values),"</body></html>")
 
 			#Snap a preview image and send it directly to the browser
 			elif self.path=='/snap':
@@ -103,7 +114,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				scanner.preview=True
 				scanner.quality_cal=False
 				scanner.depth=4
-				scanner.resolution=30.0
+				scanner.resolution=previewres
 
 				self.scan_and_save(self.wfile, 'PNG')
 
