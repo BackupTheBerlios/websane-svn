@@ -43,7 +43,7 @@
 		<xsl:variable name="taskURL">
 			http://developer.berlios.de/pm/task.php?func=detailtask&amp;project_task_id=<xsl:value-of select="@id" />&amp;group_id=<xsl:value-of select="../group_id" />&amp;group_project_id=<xsl:value-of select="../@id" />
 		</xsl:variable>
-		<xsl:varible name="statusname"><xsl:apply-templates select="status_id" mode="getStatusName" /></xsl:varible>
+		<xsl:variable name="statusname"><xsl:apply-templates select="status_id" mode="getStatusName" /></xsl:variable>
 		<xsl:if test="$statusname = 'Open'" >
 			<div>
 				<xsl:attribute name="class">taskbox state_<xsl:value-of select="$statusname" /></xsl:attribute>
