@@ -54,29 +54,8 @@ pheight=19475988/magicint #pheight is the height of the page in mm. Not used.
 config = ConfigParser.ConfigParser()
 config.read("mimetypes.cfg")
 
-class ReqHandler(BaseHTTPRequestHandler):
+class ScanHandler:
 	scanner=None
-
-	#Convenience method for getting the first scanner available
-	def get_scanner(self):
-		if (None == self.scanner) :
-			t=time()
-			print 'Initializing scanner ', sane.init(),
-			print time()-t,'seconds'
-
-			t=time()
-			
-			devs=sane.get_devices()
-			print 'Fetching available devices took ',time()-t,'seconds'
-
-			t=time()
-			self.scanner=sane.open(devs[0][0])
-			print 'Opening the first available device took ', time()-t,'seconds'
-
-			return self.scanner
-		else :
-			return self.scanner
-
 
 	#Updates the preview file.
 	def update_preview(self):
@@ -106,6 +85,32 @@ class ReqHandler(BaseHTTPRequestHandler):
 		im.save(file, imgtype)
 		print 'Converting and saving image took ',time()-t,'seconds\n'
 	
+
+	#Convenience method for getting the first scanner available
+	def get_scanner(self):
+		if (None == self.scanner) :
+			t=time()
+			print 'Initializing scanner ', sane.init(),
+			print time()-t,'seconds'
+
+			t=time()
+			
+			devs=sane.get_devices()
+			print 'Fetching available devices took ',time()-t,'seconds'
+
+			t=time()
+			self.scanner=sane.open(devs[0][0])
+			print 'Opening the first available device took ', time()-t,'seconds'
+
+			return self.scanner
+		else :
+			return self.scanner
+
+
+scanhandler = ScanHandler()
+
+class ReqHandler(BaseHTTPRequestHandler):
+
 	#Handle a http request for a file
 	def do_GET(self):
 		if self.path == '/' and self.path == '':
@@ -117,7 +122,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				
 				#Handle a refresh of the preview
 				if values['action'] == 'snap':
-					self.update_preview()
+					scanhandler.update_preview()
 					self.path=extbase+'/demo.html'
 				#Handle a scan
 				elif values['action'] == 'scan':
@@ -125,7 +130,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 					self.send_header('Content-type','image/png')
 					self.end_headers()
 					
-					scanner=self.get_scanner()
+					scanner=scanhandler.get_scanner()
 					
 					
 					if values['imgtype'] == 'BW':
@@ -146,7 +151,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * mmperinch / previewres 
 					scanner.br_y=scanner.tl_y + string.atoi(values['height']) * mmperinch / previewres
 					
-					self.scan_and_save(self.wfile, values['filetype'])
+					scanhandler.scan_and_save(self.wfile, values['filetype'])
 					return
 				#Error, print some debugging info
 				else:
@@ -162,14 +167,14 @@ class ReqHandler(BaseHTTPRequestHandler):
 				self.send_header('Content-type','image/png')
 				self.end_headers()
 
-				scanner=self.get_scanner()
+				scanner=scanhandler.get_scanner()
 
 				scanner.preview=True
 				scanner.quality_cal=False
 				scanner.depth=4
 				scanner.resolution=previewres
 
-				self.scan_and_save(self.wfile, 'PNG')
+				scanhandler.scan_and_save(self.wfile, 'PNG')
 
 			#Do a scan and return the image directly to the browser
 			elif self.path==extbase+'/scan':
@@ -177,11 +182,11 @@ class ReqHandler(BaseHTTPRequestHandler):
 				self.send_header('Content-type','image/png')
 				self.end_headers()
 				
-				scanner=self.get_scanner()
+				scanner=scanhandler.get_scanner()
 				
 				scanner.resolution=300.0
 				
-				self.scan_and_save(self.wfile, 'PNG')
+				scanhandler.scan_and_save(self.wfile, 'PNG')
 				
 			#FIXME!
 #			elif self.path.endswith('.xhtml'):
