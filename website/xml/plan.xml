@@ -33,29 +33,34 @@
 	or large functional changes will cause a bump in the major number.
 </p>
 <p>
-	This is only a rough draft, and it is quite likely that the list will change as development proceeds. Only the part
-	describing version 1.0.0 is likely to be accurate.
+	This is only a rough draft, and it is quite likely that the list will change as development proceeds.
 </p>
-<h4>Version 1.0.0</h4>
+<h4>Version 0.1.0 - Proof of concept</h4>
 <ul>
 	<li>A python webserver will run independently.</li>
-	<li>Selection, brightness and contrast using mouse will work in browsers based on Gecko, IE6 and KHTML</li>
 	<li>Darkening of the image will be done using an overlay on the client side</li>
+	<li>User may select the format for the file</li>
+	<li>Will work on recent Gecko based browsers</li>
+</ul>
+<h4>Version 1.0.0</h4>
+<ul>
+	<li>Selection, brightness and contrast using mouse will work in browsers based on Gecko, IE6 and KHTML</li>
+	<li>Brightness and contrast is done by uploading a custom gamma table for scanners that don't support brightness and contrast in hw</li> 
 	<li>Images will be saved on the server, a link will be provided to the user, and the link will be valid for 30minutes before the image is removed</li>
 </ul>	
 
 <h4>Version 1.1.0</h4>
 <ul>
-	<li>Darkening on the server side will be investigated, and implemented if seen beneficial (speed?)</li>
 	<li>Thought will be given to security</li>
 	<li>Using up/down keys in form will affect selection and sliders in all supported browsers</li>
 	<li>Opera support</li>
 	<li>Configuration files</li>
+	<li>Client-side zooming of the preview image to simplify exact selection</li>
 </ul>
 
 <h4>Version 1.2.0</h4>
 <ul>
-	<li>Landscape-mode scanning</li>
+	<li>Darkening on the server side will be investigated, and implemented if seen beneficial (speed?)</li>
 	<li>Debugging options for server</li>
 	<li>Online help system</li>
 	<li>More thinking about security</li>
@@ -66,7 +71,8 @@
 	<li>Advanced file handling</li>
 	<li>Preview using something similar to the <a href="http://persistent.info/files/20040508.magnifier/">magnifier</a></li>
 	<li>Expose more capabilities of the Python Imaging Library</li>
-	<li>Settings available only to certain scanners</li>
+	<li>Settings available only to certain scanners is detected</li>
+	<li>Landscape-mode scanning</li>
 </ul>
 
 <h3>Open questions</h3>
