@@ -79,6 +79,17 @@ class ReqHandler(BaseHTTPRequestHandler):
 				pathlist, values = self.urlParse(self.path)
 				if values['button'] == 'snap':
 					self.update_preview()
+					f=open(basepath+'demo.html')
+					self.send_response(200)
+					self.send_header('Content-type','text/html')
+					self.end_headers()
+				
+					reader = Sax2.Reader()
+					doc=reader.fromStream(f)
+					PrettyPrint(doc,self.wfile)
+				
+					f.close()
+					return
 				else:
 					self.wfile.write("<html><head/><body>"+str(values)+"</body></html>")
 					return
