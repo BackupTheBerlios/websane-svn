@@ -37,6 +37,10 @@ function setSelectionConstants(){
 	frame_width=im.width;
 	frame_height=im.height;
 	
+	/*Lets set the size of the image so that we can center it (height set just for fun)*/
+	target.style.width=frame_width+unit;
+	target.style.height=frame_height+unit;
+	
 	cur_top=0;
 	cur_left=0;
 	cur_width=frame_width;

@@ -44,7 +44,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 
 		scanner.quality_cal=False
 		scanner.depth=4
-		scanner.resolution=20.0
+		scanner.resolution=30.0
 		scanner.preview=True
 		
 		self.scan_and_save('/tmp/preview.png', 'PNG')
@@ -79,7 +79,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				pathlist, values = self.urlParse(self.path)
 				if values['button'] == 'snap':
 					self.update_preview()
-					f=open(basepath+'demo.html')
+					f=open(basepath+'/demo.html')
 					self.send_response(200)
 					self.send_header('Content-type','text/html')
 					self.end_headers()
@@ -103,7 +103,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				scanner.preview=True
 				scanner.quality_cal=False
 				scanner.depth=4
-				scanner.resolution=20.0
+				scanner.resolution=30.0
 
 				self.scan_and_save(self.wfile, 'PNG')
 
