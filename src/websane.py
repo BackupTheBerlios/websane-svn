@@ -111,10 +111,10 @@ class ReqHandler(BaseHTTPRequestHandler):
 					else:
 						scanner.resolution=string.atof(values['resolution'])
 					
-					scanner.tl_x=string.atoi(values['left']) * ( scanner.resolution/string.atoi(values['previewres']) )
-					scanner.tl_y=string.atoi(values['top']) * ( scanner.resolution/string.atoi(values['previewres']) )
-					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * ( scanner.resolution/string.atoi(values['previewres']) )
-					scanner.br_y=scanner.tl_y + string.atoi(values['height']) * ( scanner.resolution/string.atoi(values['previewres']) )
+					scanner.tl_x=string.atoi(values['left']) * ( scanner.resolution/previewres )  )
+					scanner.tl_y=string.atoi(values['top']) * ( scanner.resolution/previewres) )
+					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * ( scanner.resolution/previewres) )
+					scanner.br_y=scanner.tl_y + string.atoi(values['height']) * ( scanner.resolution/previewres) )
 					
 					self.scan_and_save(self.wfile, values['filetype'])
 
