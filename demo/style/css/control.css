@@ -18,7 +18,7 @@
 
 .control_container {
 /*	background-color: #f00;*/
-	height: 100px;
+	height: 100px;  /*FIXME*/
 	width: 30px;
 	margin-left: auto;
 	margin-right: auto;
@@ -72,4 +72,3 @@
 	padding-top: 0;
 	padding-bottom: 0;
 }
-

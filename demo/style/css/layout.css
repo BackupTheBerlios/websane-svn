@@ -1,9 +1,5 @@
 
-#toppane {
 
-display: none;
-
-}
 #leftpane {
 	/*display: none; */
 	margin-top: 1em; /*Needs to be margin not padding or IE and Mozilla interpret it differently*/
@@ -17,6 +13,7 @@ display: none;
 }
 
 #centerpane {
+	
 	margin-top: 2em;
 	/*width: 25em;*/
 	margin-right: 21em;

@@ -5,9 +5,11 @@
 	background-color: #fff;
 	background-image: url('../images/bg.gif');
 }
+
+
 .box_title {
-	position: relative;
-	
+	/*position: relative;*/
+	/*float:top;*/
 	text-align:center;
 	font-size: 1em;
 	font-weight: bold;
@@ -16,7 +18,8 @@
 	width:90%;
 	margin-right:auto;
 	margin-left:auto;
-	
+
+	/*margin-left: 5%;*/
 	padding: 0;
 
 	background-color: #e2ece6;
@@ -26,7 +29,9 @@
 .box_content {
 	padding: 1em;
 	text-align: left;
-	position: relative; /*Required by IE or it misscalculates the SELECTION location by +1em*/
+	
+	/*Required by IE or it misscalculates the SELECTION location by +1em*/
+	/*position: relative;*/ 
 }
 .box_footer {
 	border-top: 1px solid #5b8066;
