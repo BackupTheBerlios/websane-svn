@@ -28,7 +28,7 @@ from time import sleep
 #from xml.dom.ext.reader import Sax2
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
-#Not completely implemented
+#Not completely implemented. YOU SHOULD PROBABLY CHANGE THIS TO READ extbase=''
 extbase='/'
 
 #Path for where the static content is
@@ -37,17 +37,22 @@ basepath='../demo'
 previewres=30.0
 #This is a constant and shouldn't be modified
 inchinmm=25.4
-inchtomm=inchinmm
 
-#Undocumented but very important features
+#The preview file is stored here
+previewfile='/tmp/preview.png'
+
+#Undocumented but very important features.
+#These are actually how to convert the websane representation of the 
+#width of the image in to mm. Since I haven't implemented reading the
+#bounds yet, these are here just for reference.
 magicint=65536
-pwidth=14149222/magicint
-pheight=19475988/magicint
+pwidth=14149222/magicint #The 14149222 is the width of the page as reported by python sane. Not used.
+pheight=19475988/magicint #pheight is the height of the page in mm. Not used.
 
 class ReqHandler(BaseHTTPRequestHandler):
 	scanner=None
 
-	
+	#Convenience method for getting the first scanner available
 	def get_scanner(self):
 		if (None == self.scanner) :
 			t=time()
@@ -68,7 +73,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 			return self.scanner
 
 
-
+	#Updates the preview file.
 	def update_preview(self):
 		scanner=self.get_scanner()
 
@@ -77,8 +82,9 @@ class ReqHandler(BaseHTTPRequestHandler):
 		scanner.resolution=previewres
 		scanner.preview=True
 		
-		self.scan_and_save('/tmp/preview.png', 'PNG')
+		self.scan_and_save(previewfile, 'PNG')
 
+	#Scans a file with the assigned settings and saves it.
 	def scan_and_save(self, file, imgtype):
 		scanner=self.get_scanner()
 
@@ -95,6 +101,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 		im.save(file, imgtype)
 		print 'Converting and saving image took ',time()-t,'seconds\n'
 	
+	#Handle a http request for a file
 	def do_GET(self):
 		if self.path == '/favicon.ico': #reroute annoying favicon requests so we don't have to send 404s
 			self.path = '/style/images/tmp.ico'
@@ -108,6 +115,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				if values['button'] == 'snap':
 					self.update_preview()
 					self.path=extbase+'/demo.html'
+				#Handle a scan
 				elif values['button'] == 'scan':
 					self.send_response(200)
 					self.send_header('Content-type','image/png')
@@ -128,13 +136,15 @@ class ReqHandler(BaseHTTPRequestHandler):
 					else:
 						scanner.resolution=string.atof(values['resolution'])
 					
+					#Translate the pixel locations in to realworld coordinates (in to mm)
 					scanner.tl_x=string.atof(values['left']) * inchinmm / previewres 
-					scanner.tl_y=string.atof(values['top']) * inchtomm / previewres
-					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * inchtomm / previewres 
+					scanner.tl_y=string.atof(values['top']) * inchinmm / previewres
+					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * inchinmm / previewres 
 					scanner.br_y=scanner.tl_y + string.atoi(values['height']) * inchinmm / previewres
 					
 					self.scan_and_save(self.wfile, values['filetype'])
 					return
+				#Error, print some debugging info
 				else:
 					self.send_response(200)
 					self.send_header('Content-type','text/html')
@@ -194,14 +204,15 @@ class ReqHandler(BaseHTTPRequestHandler):
 				self.wfile.write( '\n\nParameters of first device:\n'+str(scanner.get_parameters()) )
 				self.wfile.write( '\n\nOptions:\n'+str(scanner.get_options()) )
 			
-			#If nothing special was aksed, just serve the file of the specified name
+			#We replace chair.jpg with the preview file.
 			elif self.path==extbase+'/chair.jpg':
-				f=open('/tmp/preview.png')
+				f=open(previewfile)
 				self.send_response(200)
 				self.send_header('Content-type','image/png')
 				self.end_headers()
 				self.wfile.write(f.read())
 				f.close()
+			#If nothing special was aksed, just serve the file of the specified name
 			else:
 				print basepath+self.path
 				f=open(basepath+self.path)
@@ -219,12 +230,13 @@ class ReqHandler(BaseHTTPRequestHandler):
 				self.end_headers()
 				self.wfile.write(f.read())
 				f.close()
+		#If we cant open the file (=can't find the file) we send a 404
 		except IOError:
 			self.send_error(404, 'IOError')
 
 	
-	#Posting will actually translate the post request to a get request, and we'll
-	#just handle everything at the get request.
+	#This handles a "post" from the browser by translating the post request to a get 
+	#request, which will be handled in the do_GET method.
 	def do_POST(self):
 		contentype=self.headers.getheader('content-type')
 		if contentype != 'application/x-www-form-urlencoded':
@@ -242,7 +254,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 		data = self.rfile.read(clen)
 		self.path = '%s?%s' % (self.path, data)
 		self.do_GET()
-		
+	
+	#This really should be in a config file. It just maps extensions to mime types
 	def getContentType(self):
 		if self.path.endswith('.png'):
 			return 'image/png'
@@ -259,7 +272,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 		elif self.path.endswith('.ico'):
 			return 'image/x-icon'
 
-
+	#This method is not written by me and as such is not licensed under the GPL
+	#Refer to the original code for the copyright holder and license.
 	def urlParse(self, url):
 		""" return path as list and query string as dictionary
 			strip / from path
@@ -295,11 +309,11 @@ def main():
 	
 		server=HTTPServer(('',5423), ReqHandler)
 		
-		print 'webserver started'
+		print 'Webserver started'
 		server.serve_forever()
 	except KeyboardInterrupt:
 		print 'Shutting down server'
 		server.socket.close()
-		
+
 if __name__ == '__main__':
 	main()	

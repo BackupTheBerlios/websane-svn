@@ -1,0 +1,48 @@
+This is the first release of WebSANE and lacks 
+a lot of polish. 
+
+The main program is a python script named 
+websane.py in the src directory. You can find 
+some configuration options at the beginning of 
+that file. You will most likely need to change
+at least the extbase variable to be empty. You
+should extract the entire filestructure and run
+the script from its own directory. 
+
+When you run the websane script it will create
+a webserver on your machine's local port 5423 
+and should point your (Gecko based) browser to 
+http://127.0.0.1:5423/demo.html to view the 
+interface. A lot of information (and possible
+errors) will be printed out by the websane.py
+script, so keep an eye on it for errors.
+
+By default it will serve out files from the 
+../demo (relative to the place from which it
+was started).
+
+When you press the Refresh preview on the web-
+fronted the server will access the first SANE
+device it finds, and scan an image and try to
+save it to /tmp/preview.png. As the page 
+reloads, the server will answer all requests
+for a file called chair.jpg by serving the 
+/tmp/preview.png file.
+
+When you press the "Scan" button the
+server will scan an image with the given 
+settings and serve it to the browser directly.
+
+
+
+For debugging:
+
+For information about the scanner and its
+options point your browser to 
+http://127.0.0.1:5423/info
+
+To simply snap a preview image use
+http://127.0.0.1:5423/snap
+
+To scan an image use
+http://127.0.0.1:5423/scan
