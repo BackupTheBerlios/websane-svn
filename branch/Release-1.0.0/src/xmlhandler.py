@@ -101,7 +101,7 @@ class XMLHandler:
 		
 	def getDocument(self):
 		doc=self.dom.toxml('utf-8')
-		return string.replace(doc,'<?xml version="1.0" encoding="utf-8"?>',' ',2)
+		return string.replace(doc,'<?xml version="1.0" encoding="utf-8"?>',' ',1)
 
 
 	def updateValues(self,values):

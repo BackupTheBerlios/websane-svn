@@ -1,4 +1,4 @@
-* Websane 1.0.0 - Lots of stuff - 
+* Websane 1.0.0 - Lots of stuff - 20050314
  - Clean up the code (more general functions, split in to classes and files 
    but a lot more could be done)
  - Filehandling (view, download, delete)
@@ -9,6 +9,7 @@
  - Rotation implemented
  - Configuration files
  - Secure filehandling
-
+ - Opera and IE6 tested
+ 
 * Websane 0.1.0 - Proof of concept - 20050308
  - Initial release.

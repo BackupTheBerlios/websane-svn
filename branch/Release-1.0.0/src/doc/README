@@ -25,6 +25,18 @@ This means that if the script crashes, you will
 not loose you scans. If you exit normally all
 scanned files will be deleted.
 
+Step by step
+------------
+- Make sure you have python 2.3 or newer, SANE, 
+  PIL (and SANE support) and minidom installed and
+  configured. 
+- Uncompress this package to a directory
+- Go to the src directory
+- command 'python websane.py' to execute the python
+  server
+- Point your browser to 
+  http://127.0.0.1:5423/demo.html
+- Enjoy
 
 Requirements
 ------------
