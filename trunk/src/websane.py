@@ -55,12 +55,12 @@ class ReqHandler(BaseHTTPRequestHandler):
 					return
 
 			if self.path.startswith(extbase+'/storedfiles/'):
-				path, values=urlparse(self.path)
+				path, values=self.urlParse(self.path)
 				print "Looking for stored file"
-				if filehandler.exists('storedfiles/'+path[-1]):
+				if filehandler.exists(path[-1]):
 					print 'It seems the stored file exists'
 					self.sendHeaders('application/octet-stream')
-					self.wfile.write( filehandler.loadFile('storedfiles/'+path[-1]).read() )
+					self.wfile.write( filehandler.loadFile(path[-1]).read() )
 					print 'File sent'
 				else:
 					print "stored file not found"
@@ -218,7 +218,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				scanhandler.scan_and_save(self.wfile,values['filetype'])
 				return True
 			else:
-				scanhandler.scan_and_save(filehandler.createFile('storedfiles/'+values['filename']), values['filetype'])
+				scanhandler.scan_and_save(filehandler.createFile(values['filename']), values['filetype'])
 			
 			xmlhandler.setFiles(filehandler.getFilenames())
 			self.path=extbase+'/demo.html'			
