@@ -18,7 +18,6 @@
 
 import string
 import sys
-import sane
 import cgi
 import urllib
 from time import time
@@ -29,13 +28,13 @@ from time import sleep
 import ConfigParser
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
+import scanhandler
+
 #Not completely implemented. YOU SHOULD PROBABLY CHANGE THIS TO READ extbase=''
 extbase='/'
 
 #Path for where the static content is
 basepath='../demo'
-#Preview resolution
-previewres=30.0
 #This is a constant and shouldn't be modified
 mmperinch=25.4
 
@@ -54,58 +53,6 @@ pheight=19475988/magicint #pheight is the height of the page in mm. Not used.
 config = ConfigParser.ConfigParser()
 config.read("mimetypes.cfg")
 
-class ScanHandler:
-	scanner=None
-
-	#Updates the preview file.
-	def update_preview(self):
-		scanner=self.get_scanner()
-
-		scanner.quality_cal=False
-		scanner.depth=4
-		scanner.resolution=previewres
-		scanner.preview=True
-		
-		self.scan_and_save(previewfile, 'PNG')
-
-	#Scans a file with the assigned settings and saves it.
-	def scan_and_save(self, file, imgtype):
-		scanner=self.get_scanner()
-
-		t=time()				
-		scanner.start()
-		print 'Starting the scanner with the selected options took ',time()-t,'seconds'
-		
-
-		t=time()
-		im=scanner.snap()
-		print 'Scanning image took ',time()-t,'seconds'
-
-		t=time()
-		im.save(file, imgtype)
-		print 'Converting and saving image took ',time()-t,'seconds\n'
-	
-
-	#Convenience method for getting the first scanner available
-	def get_scanner(self):
-		if (None == self.scanner) :
-			t=time()
-			print 'Initializing scanner ', sane.init(),
-			print time()-t,'seconds'
-
-			t=time()
-			
-			devs=sane.get_devices()
-			print 'Fetching available devices took ',time()-t,'seconds'
-
-			t=time()
-			self.scanner=sane.open(devs[0][0])
-			print 'Opening the first available device took ', time()-t,'seconds'
-
-			return self.scanner
-		else :
-			return self.scanner
-
 
 scanhandler = ScanHandler()
 
@@ -116,13 +63,13 @@ class ReqHandler(BaseHTTPRequestHandler):
 		if self.path == '/' and self.path == '':
 			self.path='/demo.html'
 		try:	
-			#If the path contains a ? then we should parse it and scan and stuff --> http://www.faqts.com/knowledge_base/view.phtml/aid/4373		
+			#If the path contains a ? then we should parse it and scan and stuff
 			if self.path.find('?')!=-1:
 				pathlist, values = self.urlParse(self.path)
 				
 				#Handle a refresh of the preview
 				if values['action'] == 'snap':
-					scanhandler.update_preview()
+					scanhandler.update_preview(previewfile)
 					self.path=extbase+'/demo.html'
 				#Handle a scan
 				elif values['action'] == 'scan':
@@ -132,7 +79,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 					
 					scanner=scanhandler.get_scanner()
 					
-					
+					if values['imgtype'] == None:
+						scanner.mode='Color'
 					if values['imgtype'] == 'BW':
 						scanner.mode='Lineart'
 					elif values['imgtype'] == 'GRAY':
@@ -206,12 +154,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 				self.send_response(200)
 				self.send_header('Conent-type','text/plain')
 				self.end_headers()
-				self.wfile.write( '\n\nSANE version:\n'+ str(sane.init()))
-				devs = sane.get_devices()
-				self.wfile.write( '\n\nAvailable devices:\n'+str(devs))
-				scanner = sane.open(devs[0][0])
-				self.wfile.write( '\n\nParameters of first device:\n'+str(scanner.get_parameters()) )
-				self.wfile.write( '\n\nOptions:\n'+str(scanner.get_options()) )
+				scanhandler.write_info(self.wfile)
 			
 			#We replace chair.jpg with the preview file.
 			elif self.path==extbase+'/chair.jpg':
@@ -264,10 +207,14 @@ class ReqHandler(BaseHTTPRequestHandler):
 		self.path = '%s?%s' % (self.path, data)
 		self.do_GET()
 	
-	#Maps extensions to mime types. Should handle unknown extensions more gracefully.
+	#Maps extensions to mime types
 	def getContentType(self):
                 extension = string.split(self.path,'.')[-1]
-		return config.get('mimetypes', extension)
+		try:
+			return config.get('mimetypes', extension)
+		except NoOptionError:
+			return
+
 
 	#This method is not written by me and as such is not licensed under the GPL
 	#Refer to the original code for the copyright holder and license.
