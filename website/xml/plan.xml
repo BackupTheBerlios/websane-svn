@@ -4,8 +4,9 @@
 The part visible to the client will be written in XHTML, CSS and Javascript. 
 </p>
 <p>
-The server end will be written in python, and will use the scanimage and convert 
-binaries.
+The server end will be written in python, and will use the Python Imaging Library to 
+access the scanner and convert the images. The server will run as an independent web 
+server on a user configurable port.
 </p>
 <p>
 While the CSS and Javascript will remain static, the DOM of the XHTML will be modified
@@ -14,19 +15,17 @@ the form values to match the ones the user specified. The dom manipulation will
 be very non-intrusive. The only changes will be made in to those elements with certain
 id attributes. In practical terms, this means that the entire XHTML part can be 
 completely redesigned or rewritten, and will still work with the server part as long 
-as the tags are on the right form elements.
+as the tags are on the right form elements. This also means that any user configuration
+of the web interface should be done by the user modifying the xhtml, css or javascript.
 </p>
 <h3>Requirements</h3>
 <p>
-The invokations of the binaries will be done using the Popen module. This means
-that the package will depend on a python version of 2.4 or newer. 
+Python and the Python Imaging Library with SANE support.
 </p>
 <p>
-An installed version of SANE and ImageMagic (for scanimage and convert respectively).
+An installed version of SANE 
 </p>
-<p>
-Possibly apache if the server end can't run independently.
-</p>
+
 <h3>Open questions</h3>
 <ul>
 	<li>
@@ -36,7 +35,16 @@ Possibly apache if the server end can't run independently.
 			<li>The speed of the client would also be improved and the moire stuff would vanish if we used the server to create a darkened version of the preview.</li>
 		</ul>
 	</li>
-	<li>Should the server side run independently as a webserver, or on top of apache or both?</li>
+	<li>Should the server side run independently as a webserver, or on top of apache or both?
+		<ul>
+			<li>
+			I like the idea of having the service run on a separate port as a webserver. This would mean not
+			requiring apache (apache would be overkill), non priviledged users could run the server
+			and no mucking around with apache configs would be required.
+			</li>
+		</ul>
+	</li>
+
 	<li>
 		How should saving, viewing of a saved image and deleting of a saved image work?
 		<ul>
@@ -63,7 +71,7 @@ Possibly apache if the server end can't run independently.
 <li>Easy to use</li>
 <li>Cross platform and cross browser</li>
 <li>Minimal requirements on browser, but always without compromizing usability</li>
-<li>Possibility of separating xhtml from backend</li>
+<li>Separate xhtml from backend</li>
 <li>Backend should be configurable</li>
 </ul>
 <h4>Secondary</h4>
@@ -72,7 +80,7 @@ Possibly apache if the server end can't run independently.
 <li>Clear debugging information on server</li>
 <li>Logs and statistics</li>
 <li>Scanner specific settings</li>
-<li>Showing more possibilities offered by convert</li>
+<li>Showing more possibilities offered by the Imaging Library</li>
 </ul>
 
 </htmlPage>
