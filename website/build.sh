@@ -64,6 +64,7 @@ fi
 if [ $NOUPDATE != "TRUE" ]
 then
 	svn update
+	chmod a+x build.sh
 fi
 
 if [ $NOBUILD != "TRUE" ]
