@@ -1,0 +1,11 @@
+<htmlPage title="Links">
+<p>
+While developing this project I have stumbled across similar projects:
+</p>
+<ul>
+	<li><a href="http://phpsane.sourceforge.net">phpSANE</a></li>
+	<li><a href="http://sourceforge.net/projects/sanewi">SANE Web interface</a></li>
+	<li><a href="http://scanner.zhrodague.net/">zhrosane</a></li>
+</ul>
+
+</htmlPage>
