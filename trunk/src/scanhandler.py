@@ -89,16 +89,29 @@ class ScanHandler:
 		towriteto.write( '\n\nAvailable devices:\n'+str(devs))
 		scanner = sane.open(devs[string.atoi(self.config.get('general','devicenumber'))][0])
 		towriteto.write( '\n\nParameters of specified device:\n'+str(scanner.get_parameters()) )
+		towriteto.write( '\n\nOptlist:\n')
+		towriteto.write( str(scanner.optlist) )
 		opts=scanner.get_options()
 		towriteto.write( '\n\nActive options:\n')
 		for x in opts:
-			if x[7] != 37:
+			if self.option_is_active(x[1]):
 				towriteto.write( str(x)+'\n' )
 		towriteto.write( '\n\nInactive options:\n')
 		for x in opts:
-			if x[7] == 37:
+			if not self.option_is_active(x[1]):
 				towriteto.write( str(x)+'\n' )
-	
+
+	def option_is_active(self, opt):
+		opts=self.scanner.get_options()
+		for x in opts:
+			if x[1] == opt: 
+				if (x[7]&self.SANE_CAP_INACTIVE) == self.SANE_CAP_INACTIVE:
+					return False
+				else:
+					return True
+		print "Warning, option no found:",opt
+		return False
+
 	#Translate the pixel locations in the preview to realworld coordinates (in to mm)
 	def set_scan_bounds_from_preview(self, x_px, y_px, width_px, height_px, rotation=0, previewres=None):
 		if previewres != None:
@@ -137,12 +150,15 @@ class ScanHandler:
 		print "Y1:",self.scanner.tl_y
 		print "X2:",self.scanner.br_x
 		print "Y2:",self.scanner.br_y
-		
+	
+	def supports_brightness_and_contrast(self):
+		return self.scanner.brightness.is_active() and self.scanner.contrast.is_active() 		
+
 	def set_brightness_and_contrast(self, brightness,contrast):
-		try:
+		if (self.supports_brightness_and_contrast()):
 			self.scanner.brightness=brightness
 			self.scanner.contrast=contrast
-		except AttributeError:
+		else:
 			print "Brightness/contrast not supported by scanner"
 			
 	def set_preview_rotation(self, rotation):
