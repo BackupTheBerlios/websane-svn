@@ -42,7 +42,12 @@
 					<div class="content">
 						
 						<xsl:for-each select="channel/item">
-							<div class="news_title"><xsl:value-of select="title" /></div>
+							<div class="news_title">
+								<a>	
+									<xsl:attribute name="href"><xsl:value-of select="guid" /></xsl:attribute>
+									<xsl:value-of select="title" />
+								</a>
+							</div>
 							<div class="news_time"><xsl:value-of select="author" /> - <xsl:value-of select="pubDate" /></div>
 							<div class="news_content"><xsl:call-template name="txttolink"><xsl:with-param name="txt" select="description" /></xsl:call-template></div>
 						</xsl:for-each>

@@ -20,8 +20,8 @@
 	<page name="links.html" inmenu="yes" menutitle="Links" >
 		<xi:include href="links.xml" />
 	</page>
-	<page name="download.html" inmenu="yes" menutitle="Download">
-		<xi:include href="download.xml" />
+	<page name="download.html" inmenu="yes" menutitle="Downloads">
+		<xi:include href="http://developer.berlios.de/export/rss20_bsnewreleases.php?group_id=3028" />
 	</page>
 	<page name="demo/demo.html" inmenu="yes" menutitle="Demo" /> 
 </site>
