@@ -12,7 +12,12 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 basepath='../demo'
 previewres=30.0
+inchinmm=25.4
 
+magicint=65536
+
+pwidth=14149222/magicint
+pheight=19475988/magicint
 
 class ReqHandler(BaseHTTPRequestHandler):
 	scanner=None
@@ -93,6 +98,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 					
 					scanner=self.get_scanner()
 					
+					
 					if values['imgtype'] == 'BW':
 						scanner.mode='Lineart'
 					elif values['imgtype'] == 'GRAY':
@@ -104,6 +110,11 @@ class ReqHandler(BaseHTTPRequestHandler):
 						scanner.resolution=string.atof(values['custom_resolution'])
 					else:
 						scanner.resolution=string.atof(values['resolution'])
+					
+					scanner.tl_x=string.atoi(values['left']) * ( scanner.resolution/string.atoi(values['previewres']) )
+					scanner.tl_y=string.atoi(values['top']) * ( scanner.resolution/string.atoi(values['previewres']) )
+					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * ( scanner.resolution/string.atoi(values['previewres']) )
+					scanner.br_y=scanner.tl_y + string.atoi(values['height']) * ( scanner.resolution/string.atoi(values['previewres']) )
 					
 					self.scan_and_save(self.wfile, values['filetype'])
 
