@@ -16,5 +16,32 @@
 		<xsl:value-of select="."/>
 		<!--<xsl:value-of select="normalize-space(.)"/>-->
 	</xsl:template>
+	
+	
+	<xsl:template name="txttolink">
+		<xsl:param name="txt" />
+		<xsl:choose>
+			<xsl:when test="contains($txt,'http:')">
+				<xsl:value-of select="substring-before($txt,'http:')" />
+				<xsl:variable name="link">
+					<xsl:value-of select="substring-before(substring-after($txt,'http:'), ' ')" />
+				</xsl:variable>
+				<a>
+					<xsl:attribute name="href">http:<xsl:value-of select="$link" /></xsl:attribute>
+					http:<xsl:value-of select="$link" />
+				</a>
+				<xsl:call-template name="txttolink" >
+					<xsl:with-param name="txt" select="substring-after($txt,$link)" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$txt" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	
+	
+	
 		
 </xsl:stylesheet>

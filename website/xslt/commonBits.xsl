@@ -10,7 +10,11 @@
 		
 	<xsl:template name="createHTMLHead">
 		<head>
-			<title><xsl:value-of select="@title" /></title>
+			<title>WebSANE
+				<xsl:if test="@title">
+					- <xsl:value-of select="@title" />
+				</xsl:if>
+			</title>
 			<link rel="stylesheet" type="text/css" href="style/css/default.css"> </link>
 			<link rel="stylesheet" type="text/css" href="style/css/head.css"> </link>
 			<link rel="stylesheet" type="text/css" href="style/css/leftbar.css"> </link>
