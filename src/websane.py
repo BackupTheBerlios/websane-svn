@@ -21,9 +21,9 @@ import cgi
 import urllib
 from time import time
 from time import sleep
-from xml.dom.ext import PrettyPrint
-from xml.dom import implementation
-from xml.dom.ext.reader import Sax2
+#from xml.dom.ext import PrettyPrint
+#from xml.dom import implementation
+#from xml.dom.ext.reader import Sax2
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 #Not completely implemented
@@ -168,18 +168,18 @@ class ReqHandler(BaseHTTPRequestHandler):
 				self.scan_and_save(self.wfile, 'PNG')
 				
 			#FIXME!
-			elif self.path.endswith('.xhtml'):
-				f=open(basepath+self.path)
-				self.send_response(200)
-				self.send_header('Content-type','text/html')
-				self.end_headers()
-				
-				reader = Sax2.Reader()
-				doc=reader.fromStream(f)
-				PrettyPrint(doc,self.wfile)
-				
-				f.close()
-			
+#			elif self.path.endswith('.xhtml'):
+#				f=open(basepath+self.path)
+#				self.send_response(200)
+#				self.send_header('Content-type','text/html')
+#				self.end_headers()
+#				
+#				reader = Sax2.Reader()
+#				doc=reader.fromStream(f)
+#				PrettyPrint(doc,self.wfile)
+#				
+#				f.close()
+#			
 			#Used for debugging. Displays info about scanner.
 			elif self.path==extbase+'/info':
 				self.send_response(200)
