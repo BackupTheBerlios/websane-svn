@@ -12,9 +12,16 @@ basepath='/home/mikko/websane_temp/websane/demo'
 
 class ReqHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
+		print "Doing GET"
 		try:
+			if self.path.find('?')!=-1:	#If the path contains a ? then we should parse it and scan and stuff --> http://www.faqts.com/knowledge_base/view.phtml/aid/4373
+				self.send_response(200)
+				self.send_header('Content-type','text/html')
+				self.end_headers()
+				
+				self.wfile.write("<html><head/><body>Hello</body></html>")
 			
-			if self.path.endswith('.xhtml'):
+			elif self.path.endswith('.xhtml'):
 				f=open(basepath+self.path)
 				self.send_response(200)
 				self.send_header('Content-type','text/html')
@@ -49,10 +56,9 @@ class ReqHandler(BaseHTTPRequestHandler):
 			self.send_error(404, 'IOError')
 			
 	def do_POST(self):
-		print self.headers
 		contentype=self.headers.getheader('content-type')
 		if contentype != 'application/x-www-form-urlencoded':
-			print 'Error: Uncexpected content-type: ',contentype
+			print 'Error: Uncexpected content-type specified in header: ',contentype
 			return
 		
 		clen = self.headers.getheader('content-length')
@@ -60,14 +66,12 @@ class ReqHandler(BaseHTTPRequestHandler):
 		if clen:
 			clen = string.atoi(clen)
 		else:
-			print 'POST ERROR: missing content-length'
+			print 'Error: Header is missing content-length'
 			return
 		
 		data = self.rfile.read(clen)
-		print "HELLO!"
-		print data
-		return
-
+		self.path = '%s?%s' % (self.path, data)
+		self.do_GET()
 		
 	def getContentType(self):
 		if self.path.endswith('.png'):
