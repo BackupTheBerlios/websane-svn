@@ -12,7 +12,8 @@ I also have some links that are relevant to the technology used:
 </p>
 <ul>
 	<li><a href="http://www.amk.ca/python/code/sane.html">Python SANE example</a></li>
-
+	<li><a href="ftp://ftp.logilab.org/pub/talks/python-uk-2002.pdf">A PDF with a few good examples on using XML in python</a></li>
+	<li><a href="http://pyxml.sourceforge.net/topics/howto/xml-howto.html">The PyXML api</a></li>
 </ul>
 
 
