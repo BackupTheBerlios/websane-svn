@@ -3,45 +3,107 @@ import sys
 import sane
 import cgi
 import urllib
+from time import time
+from time import sleep
 from xml.dom.ext import PrettyPrint
 from xml.dom import implementation
 from xml.dom.ext.reader import Sax2
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
-basepath='/home/mikko/websane_temp/websane/demo'
+basepath='/home/mvirkkil/websane/demo'
 
 
 
 class ReqHandler(BaseHTTPRequestHandler):
+	scanner=None
 
 	
+	def get_scanner(self):
+		if (None == self.scanner) :
+			t=time()
+			print 'Initializing scanner ', sane.init(),
+			print time()-t,'seconds'
+
+			t=time()
+			print 'Fetching available devices: ',
+			devs=sane.get_devices()
+			print time()-t,'seconds'
+
+			t=time()
+			print 'Opening the first available device: ',
+			self.scanner=sane.open(devs[0][0])
+			print time()-t,'seconds'
+
+
+			return self.scanner
+		else :
+			return self.scanner
+
+	def scan_and_send_image(self):
+		scanner=self.get_scanner()
+
+		t=time()				
+		print 'Starting the scanner with the selected options: ',
+		scanner.start()
+		print time()-t,'seconds'
+		
+
+		t=time()
+		print 'Scanning image: ',
+		im=scanner.snap()
+		print time()-t,'seconds'
+
+		t=time()
+		print 'Scan done, starting to convert and send: ',
+		im.save(self.wfile , "PNG")
+		print time()-t,'seconds'
+
+		print 'All done!'
+		
 	
 	def do_GET(self):
 		if self.path == '/favicon.ico': #reroute annoying favicon requests so we don't have to send 404s
 			self.path = '/style/images/tmp.ico'
 	
-		try:
+		try:		
 			if self.path=='/snap':
 				self.send_response(200)
 				self.send_header('Content-type','image/png')
 				self.end_headers()
+
+				scanner=self.get_scanner()
+
+				scanner.preview=True
+				scanner.quality_cal=False
+				scanner.depth=4
+				scanner.resolution=20.0
+
 				
-				print 'SANE version:', sane.init()
+				self.scan_and_send_image()
+
+			elif self.path=='/info':
+				self.send_response(200)
+				self.send_header('Conent-type','text/plain')
+				self.end_headers()
+				self.wfile.write( '\n\nSANE version:\n'+ str(sane.init()))
 				devs = sane.get_devices()
-				print 'Available devices=', devs
-				scanner=sane.open(devs[0][0])
-				print scanner
-				scanner.contrast=170 
-				scanner.brightness=150 
+				self.wfile.write( '\n\nAvailable devices:\n'+str(devs))
+				scanner = sane.open(devs[0][0])
+				self.wfile.write( '\n\nParameters of first device:\n'+str(scanner.get_parameters()) )
+				self.wfile.write( '\n\nOptions:\n'+str(scanner.get_options()) )
+			elif self.path=='/scan':
+				self.send_response(200)
+				self.send_header('Content-type','image/png')
+				self.end_headers()
 				
-				scanner.br_x=320
-				scanner.br_y=240
+				scanner=self.get_scanner()
 				
-				scanner.start() #Removing this will cause a segmentation fault!
-				im=scanner.snap()
-				self.wfile.write(im)
+				scanner.resolution=300.0
 				
-			if self.path.find('?')!=-1:	#If the path contains a ? then we should parse it and scan and stuff --> http://www.faqts.com/knowledge_base/view.phtml/aid/4373
+				self.scan_and_send_image()
+				
+								
+			elif self.path.find('?')!=-1:	#If the path contains a ? then we should parse it and scan and stuff --> http://www.faqts.com/knowledge_base/view.phtml/aid/4373
 				self.send_response(200)
 				self.send_header('Content-type','text/html')
 				self.end_headers()
