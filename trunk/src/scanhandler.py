@@ -76,12 +76,20 @@ class ScanHandler:
 		print 'Opening the selected device took ', time()-t,'seconds'
 
 	def write_info(self,towriteto):
-		towriteto.write( '\n\nSANE version:\n'+ str(sane.init()))
+		towriteto.write( '\n\nSANE version:\n'+str(sane.init()))
 		devs = sane.get_devices()
 		towriteto.write( '\n\nAvailable devices:\n'+str(devs))
 		scanner = sane.open(devs[string.atoi(self.config.get('general','devicenumber'))][0])
-		towriteto.write( '\n\nParameters specified device:\n'+str(scanner.get_parameters()) )
-		towriteto.write( '\n\nOptions:\n'+str(scanner.get_options()) )
+		towriteto.write( '\n\nParameters of specified device:\n'+str(scanner.get_parameters()) )
+		opts=scanner.get_options()
+		towriteto.write( '\n\nActive options:\n')
+		for x in opts:
+			if x[7] != 37:
+				towriteto.write( str(x)+'\n' )
+		towriteto.write( '\n\nInactive options:\n')
+		for x in opts:
+			if x[7] == 37:
+				towriteto.write( str(x)+'\n' )
 	
 	#Translate the pixel locations in the preview to realworld coordinates (in to mm)
 	def set_scan_bounds_from_preview(self, x_px, y_px, width_px, height_px, rotation=0, previewres=None):
