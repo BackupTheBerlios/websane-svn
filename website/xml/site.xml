@@ -20,5 +20,8 @@
 	<page name="links.html" inmenu="yes" menutitle="Links" >
 		<xi:include href="links.xml" />
 	</page>
+	<page>
+		<xi:include href="download.xml" />
+	</page>
 	<page name="demo/demo.html" inmenu="yes" menutitle="Demo" /> 
 </site>
