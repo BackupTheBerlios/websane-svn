@@ -93,7 +93,17 @@ class ReqHandler(BaseHTTPRequestHandler):
 					
 					scanner=self.get_scanner()
 					
-					scanner.resolution=atof(values['resolution'])
+					if values['imgtype'] == 'BW':
+						scanner.mode='Lineart'
+					elif values['imgtype'] == 'GRAY':
+						scanner.mode='Gray'
+					else:
+						scanner.mode='Color'
+					
+					if values['resolution'] == 'OTHER':
+						scanner.resolution=string.atof(values['custom_resolution'])
+					else:
+						scanner.resolution=string.atof(values['resolution'])
 					
 					self.scan_and_save(self.wfile, values['filetype'])
 
