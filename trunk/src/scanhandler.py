@@ -111,7 +111,7 @@ class ScanHandler:
 			self.scanner.tl_x=top_y
 			self.scanner.tl_y=self.max_height-bottom_x
 			self.scanner.br_x=bottom_y
-		else #rotation==0
+		else: #rotation==0
 			self.scanner.tl_x=top_x
 			self.scanner.lt_y=top_y
 			self.scanner.br_x=bottom_x
