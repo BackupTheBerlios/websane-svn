@@ -23,30 +23,38 @@ import tempfile
 class FileHandler:
 	openfiles={}
 	
+	def getFilenames(self):
+		return self.openfiles.keys()
+	
 	def exists(self, filename):
-		if self.openfiles == None:
-			return False
-		try:
-			self.openfiles[filename]
-			return True
-		except KeyError:
-			return False
-		
+		return self.openfiles.has_key(filename)
 		
 	def createFile(self,filename):
-		file=tempfile.TemporaryFile()
-		self.openfiles[filename]=file
+		file,path=tempfile.mkstemp('','websane_')
+		self.openfiles[filename]=(file,path)
 		return file
 		
-	def loadFile(self,filename):
-		f=self.openfiles[filename]
-		f.seek(0)
-		return f		
+	def openFile(self,filename):
+		f,p=self.openfiles[filename]
+		if not f.closed:
+			print "The file hasn't been closed!"
+			raise IOError
+		else
+			self.openfiles[filename]=(open(p),p)
+			return self.openfiles[filename][0]
 
 	def deleteFile(self, filename):
-		self.openfiles[filename].close()
+		f,p=self.openfiles[filename]
+		if not f.closed:
+			print "Warnign: The file hasn't been closed, unlinking anyway"
+		os.unlink(p)
 		del self.openfiles[filename]
 	
+	def deleteAllFiles(self):
+		for f,p in self.openfiles:
+			deleteFile(p)
+		self.openfiles.clear()
+
 def main():
 	print "No tests"
 	
