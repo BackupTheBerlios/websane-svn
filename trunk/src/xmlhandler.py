@@ -106,12 +106,13 @@ class XMLHandler:
 	
 	def setFiles(self,filenames):
 		for select in self.dom.getElementsByTagName('select'):
-			if select.attributes['name']=='selected_file':
+			if select.attributes['name'].value=='selected_file':
 				while select.hasChildNodes():
 					select.removeChild(select.lastChild)
 				for filename in filenames:
-					addSelectionOption(select,filename,filename)
-				return	
+					self.addSelectionOption(select,filename,filename)
+				return
+		print "Fucked at creating file list"	
 	
 	def addSelectionOption(self,selection,value,text):
 		a = self.dom.createElement('option')

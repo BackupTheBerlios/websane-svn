@@ -16,6 +16,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+import os
 import ConfigParser
 from time import time
 import tempfile
@@ -30,12 +31,17 @@ class FileHandler:
 		return self.openfiles.has_key(filename)
 		
 	def createFile(self,filename):
+		if self.exists(filename):
+			raise IOError
 		file,path=tempfile.mkstemp('','websane_')
-		file.close() #We want a file object, not a filedescriptor
+		os.close(file) #We want a file object, not a filedescriptor
 		self.openfiles[filename]=path
-		return open(path)
+
+		print "Created",filename,"as",path
+		return open(path,'w+b')
+
 		
-	def openFile(self,filename):
+	def loadFile(self,filename):
 		return open(self.openfiles[filename])
 
 	def deleteFile(self, filename):
@@ -44,13 +50,23 @@ class FileHandler:
 		del self.openfiles[filename]
 	
 	def deleteAllFiles(self):
-		for p in self.openfiles:
-			deleteFile(p)
+		for filename in self.openfiles.keys():
+			os.unlink(self.openfiles[filename])
 		self.openfiles.clear()
 
+	def __del__(self):
+		print "Deleting all scanned files"
+		self.deleteAllFiles()
+		print "Done"
 def main():
-	print "No tests"
-	
+	fh=FileHandler()
+	f=fh.createFile('kissa')
+	f.write('possu')
+	print 'wrote possu'	
+	f.close()
+	print 'closed file'
+	f=fh.loadFile('kissa')
+	print f.read()
 	
 	
 if __name__ == '__main__':

@@ -213,12 +213,12 @@ class ReqHandler(BaseHTTPRequestHandler):
 			
 			scanhandler.set_scan_bounds_from_preview(values['left'],values['top'],values['width'],values['height'],values['rotation'])
 			
-			if values['before_save']==send:
-				self.sendHeaders('application/octet-stream')
-				scanhandler.scan_and_save(self.wfile,values['filetype'])
-				return True
-			else:
-				scanhandler.scan_and_save(filehandler.createFile(values['filename']), values['filetype'])
+			#if values['before_save']==send:
+			#	self.sendHeaders('application/octet-stream')
+			#	scanhandler.scan_and_save(self.wfile,values['filetype'])
+			#	return True
+			#else:
+			scanhandler.scan_and_save(filehandler.createFile(values['filename']), values['filetype'])
 			
 			xmlhandler.setFiles(filehandler.getFilenames())
 			self.path=extbase+'/demo.html'			
