@@ -1,16 +1,16 @@
 import string
 import sys
-from xml.dom import ext
+from xml.dom.ext import PrettyPrint
 from xml.dom import implementation
 from xml.dom.ext.reader import Sax2
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 class ReqHandler(BaseHTTPRequestHandler):
-	
 	def do_GET(self):
 		try:
+			
 			if self.path.endswith('.xhtml'):
-				basepath='/home/koody/python'
+				basepath='/home/mikko/websane_temp/websane/demo'
 				f=open(basepath+self.path)
 				self.send_response(200)
 				self.send_header('Content-type','text/html')
@@ -18,17 +18,26 @@ class ReqHandler(BaseHTTPRequestHandler):
 				
 				reader = Sax2.Reader()
 				doc=reader.fromStream(f)
-				import xml.dom.ext
-				xml.dom.ext.PrettyPrint(doc,self.wfile)
+				PrettyPrint(doc,self.wfile)
 				
 				f.close()
 			elif self.path=='/favicon.ico':
 				self.send_error(404, 'No favicon')
 			else:
-				basepath='/home/koody/python'
+				basepath='/home/mikko/websane_temp/websane/demo'
+				print basepath+self.path
 				f=open(basepath+self.path)
 				self.send_response(200)
-				self.send_header('Content-type','text/html')
+				
+				if getContentType( self.path ) == None:
+					#Let's not serve unknown stuff
+					self.send_header('Content-type','text/plain')
+					self.end_headers()
+					f.close()
+					return
+				else:
+					self.send_header('Content-type',getContentType( self.path ))
+					
 				self.end_headers()
 				self.wfile.write(f.read())
 				f.close()
@@ -37,6 +46,25 @@ class ReqHandler(BaseHTTPRequestHandler):
 			
 	def do_POST(self):
 		return
+
+
+
+
+def getContentType(urlpath):
+	if urlpath.endswith('.png'):
+		return 'image/png'
+	elif urlpath.endswith('.gif'):
+		return 'image/gif'
+	elif urlpath.endswith('.jpg') | urlpath.endswith('.jpeg'):
+		return 'image/jpeg'
+	elif urlpath.endswith('.css'):
+		return 'text/css'
+	elif urlpath.endswith('.js'):
+		return 'text/plain'
+	elif urlpath.endswith('.html'):
+		return 'text/html'
+
+
 
 def main():
 	try:
