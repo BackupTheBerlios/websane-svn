@@ -10,7 +10,7 @@ from xml.dom import implementation
 from xml.dom.ext.reader import Sax2
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
-basepath='/home/mvirkkil/websane/demo'
+basepath='../demo'
 
 
 
@@ -25,47 +25,68 @@ class ReqHandler(BaseHTTPRequestHandler):
 			print time()-t,'seconds'
 
 			t=time()
-			print 'Fetching available devices: ',
+			
 			devs=sane.get_devices()
-			print time()-t,'seconds'
+			print 'Fetching available devices took ',time()-t,'seconds'
 
 			t=time()
-			print 'Opening the first available device: ',
 			self.scanner=sane.open(devs[0][0])
-			print time()-t,'seconds'
-
+			print 'Opening the first available device took ', time()-t,'seconds'
 
 			return self.scanner
 		else :
 			return self.scanner
 
-	def scan_and_send_image(self):
+
+
+	def update_preview(self):
+		scanner=self.get_scanner()
+
+		scanner.quality_cal=False
+		scanner.depth=4
+		scanner.resolution=20.0
+		scanner.preview=True
+		
+		self.scan_and_save('/tmp/preview.png', 'PNG')
+
+	def scan_and_save(self, file, imgtype):
 		scanner=self.get_scanner()
 
 		t=time()				
-		print 'Starting the scanner with the selected options: ',
 		scanner.start()
-		print time()-t,'seconds'
+		print 'Starting the scanner with the selected options took ',time()-t,'seconds'
 		
 
 		t=time()
-		print 'Scanning image: ',
 		im=scanner.snap()
-		print time()-t,'seconds'
+		print 'Scanning image took ',time()-t,'seconds'
 
 		t=time()
-		print 'Scan done, starting to convert and send: ',
-		im.save(self.wfile , "PNG")
-		print time()-t,'seconds'
-
-		print 'All done!'
-		
+		im.save(file, imgtype)
+		print 'Converting and saving image took ',time()-t,'seconds\n'
 	
 	def do_GET(self):
 		if self.path == '/favicon.ico': #reroute annoying favicon requests so we don't have to send 404s
 			self.path = '/style/images/tmp.ico'
 	
-		try:		
+		try:	
+			#If the path contains a ? then we should parse it and scan and stuff --> http://www.faqts.com/knowledge_base/view.phtml/aid/4373		
+			if self.path.find('?')!=-1:
+				self.send_response(200)
+				self.send_header('Content-type','text/html')
+				self.end_headers()
+				
+				pathlist, values = self.urlParse(self.path)
+				if values['button'] == 'snap':
+					self.update_preview()
+				else:
+					self.wfile.write("<html><head/><body>"+str(values)+"</body></html>")
+					return
+
+			
+			
+			
+			#Snap a preview image and send it directly to the browser
 			if self.path=='/snap':
 				self.send_response(200)
 				self.send_header('Content-type','image/png')
@@ -78,19 +99,9 @@ class ReqHandler(BaseHTTPRequestHandler):
 				scanner.depth=4
 				scanner.resolution=20.0
 
-				
-				self.scan_and_send_image()
+				self.scan_and_save(self.wfile, 'PNG')
 
-			elif self.path=='/info':
-				self.send_response(200)
-				self.send_header('Conent-type','text/plain')
-				self.end_headers()
-				self.wfile.write( '\n\nSANE version:\n'+ str(sane.init()))
-				devs = sane.get_devices()
-				self.wfile.write( '\n\nAvailable devices:\n'+str(devs))
-				scanner = sane.open(devs[0][0])
-				self.wfile.write( '\n\nParameters of first device:\n'+str(scanner.get_parameters()) )
-				self.wfile.write( '\n\nOptions:\n'+str(scanner.get_options()) )
+			#Do a scan and return the image directly to the browser
 			elif self.path=='/scan':
 				self.send_response(200)
 				self.send_header('Content-type','image/png')
@@ -100,18 +111,9 @@ class ReqHandler(BaseHTTPRequestHandler):
 				
 				scanner.resolution=300.0
 				
-				self.scan_and_send_image()
-				
-								
-			elif self.path.find('?')!=-1:	#If the path contains a ? then we should parse it and scan and stuff --> http://www.faqts.com/knowledge_base/view.phtml/aid/4373
-				self.send_response(200)
-				self.send_header('Content-type','text/html')
-				self.end_headers()
-				
-				pathlist, values = urlParse(self.path)
-				
-				self.wfile.write("<html><head/><body>"+str(values)+"</body></html>")
+				self.scan_and_save(self.wfile, 'PNG')
 			
+			#FIXME!
 			elif self.path.endswith('.xhtml'):
 				f=open(basepath+self.path)
 				self.send_response(200)
@@ -124,8 +126,20 @@ class ReqHandler(BaseHTTPRequestHandler):
 				
 				f.close()
 			
+			#Used for debugging. Displays info about scanner.
+			elif self.path=='/info':
+				self.send_response(200)
+				self.send_header('Conent-type','text/plain')
+				self.end_headers()
+				self.wfile.write( '\n\nSANE version:\n'+ str(sane.init()))
+				devs = sane.get_devices()
+				self.wfile.write( '\n\nAvailable devices:\n'+str(devs))
+				scanner = sane.open(devs[0][0])
+				self.wfile.write( '\n\nParameters of first device:\n'+str(scanner.get_parameters()) )
+				self.wfile.write( '\n\nOptions:\n'+str(scanner.get_options()) )
+			
+			#If nothing special was aksed, just serve the file of the specified name
 			else:
-				#This is for serving regular files from the hd
 				print basepath+self.path
 				f=open(basepath+self.path)
 				self.send_response(200)
@@ -144,7 +158,10 @@ class ReqHandler(BaseHTTPRequestHandler):
 				f.close()
 		except IOError:
 			self.send_error(404, 'IOError')
-			
+
+	
+	#Posting will actually translate the post request to a get request, and we'll
+	#just handle everything at the get request.
 	def do_POST(self):
 		contentype=self.headers.getheader('content-type')
 		if contentype != 'application/x-www-form-urlencoded':
@@ -180,37 +197,34 @@ class ReqHandler(BaseHTTPRequestHandler):
 			return 'image/x-icon'
 
 
-	
-	
-
-def urlParse(url):
-	""" return path as list and query string as dictionary
-		strip / from path
-		ignore empty values in query string
-		for example:
-		if url is: /xyz?a1=&a2=0%3A1
-		then result is: (['xyz'], { 'a2' : '0:1' } )
-		if url is: /a/b/c/
-		then result is: (['a', 'b', 'c'], None )
-		if url is: /?
-		then result is: ([], {} )
-	"""
-	x = string.split(url, '?')
-	pathlist = filter(None, string.split(x[0], '/'))
-	d = {}
-	if len(x) > 1:
-		q = x[-1]                  # eval query string
-		x = string.split(q, '&')
-		for kv in x:
-			y = string.split(kv, '=')
-			k = y[0]
-			try:
-				v = urllib.unquote_plus(y[1])
-				if v:               # ignore empty values
-					d[k] = v
-			except:
-				pass
-	return (pathlist, d)
+	def urlParse(self, url):
+		""" return path as list and query string as dictionary
+			strip / from path
+			ignore empty values in query string
+			for example:
+			if url is: /xyz?a1=&a2=0%3A1
+			then result is: (['xyz'], { 'a2' : '0:1' } )
+			if url is: /a/b/c/
+			then result is: (['a', 'b', 'c'], None )
+			if url is: /?
+			then result is: ([], {} )
+		"""
+		x = string.split(url, '?')
+		pathlist = filter(None, string.split(x[0], '/'))
+		d = {}
+		if len(x) > 1:
+			q = x[-1]                  # eval query string
+			x = string.split(q, '&')
+			for kv in x:
+				y = string.split(kv, '=')
+				k = y[0]
+				try:
+					v = urllib.unquote_plus(y[1])
+					if v:               # ignore empty values
+						d[k] = v
+				except:
+					pass
+		return (pathlist, d)
 
 	
 def main():
