@@ -113,8 +113,9 @@
 		
 	</div>
 	<div class="buttonarea">
-		<button type="submit" name="button" value="snap"><img src="style/images/scan.gif" alt="Preview" />Refresh preview</button>
-		<button type="submit" name="button" value="scan"><img src="style/images/save.gif" alt="Scan" />Scan</button>
+		<input type="hidden" name="action" value="" id="actionelement" />
+		<button type="submit" name="button" value="snap" onclick="document.getElementById('actionelement').value='snap'"><img src="style/images/scan.gif" alt="Preview" />Refresh preview</button>
+		<button type="submit" name="button" value="scan" onclick="document.getElementById('actionelement').value='scan'"><img src="style/images/save.gif" alt="Scan" />Scan</button>
 	</div>
 
 </div> <!--end leftpane -->
