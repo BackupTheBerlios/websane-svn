@@ -53,13 +53,13 @@
 		<div class="box_title">Rotation</div>
 		<div class="box_content">
 			<label><input type="radio" value="0" name="rotation" checked="checked" />None</label><br />
-			<label><input type="radio" value="270" name="rotation" />90&deg; clockwise</label>
+			<label><input type="radio" value="270" name="rotation" />90&deg; clockwise</label><br />
 			<label><input type="radio" value="180" name="rotation" />180&deg;</label><br />
-			<label><input type="radio" value="90" name="rotation" />90&deg; counter-clockwise</label><br />			
+			<label><input type="radio" value="90" name="rotation" />90&deg; counter-clockwise</label>
 		</div>
 	</div>
 	<!-- Brightness and contrast (not implemented) -->
-	<div class="box hidden">
+	<div class="box">
 		<div class="box_title">Levels</div>
 		<div class="box_content">
 			<div id='brightness' class="control" >
@@ -70,7 +70,7 @@
 					</div>
 				</div>
 				<div class="control_info">
-					<input type="text" name="brightness" class="form_info" id="brightness_box" value="20%" />
+					<input type="text" name="brightness" class="form_info" id="brightness_box" value="0" />
 				</div>
 			</div>
 			<div id='contrast' class="control" >
@@ -81,7 +81,7 @@
 					</div>
 				</div>
 				<div class="control_info">
-					<input type="text" name="contrast" class="form_info" id="contrast_box" value="50%" />
+					<input type="text" name="contrast" class="form_info" id="contrast_box" value="0" />
 				</div>
 			</div>
 		</div>

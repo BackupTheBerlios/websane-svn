@@ -54,6 +54,11 @@ class ReqHandler(BaseHTTPRequestHandler):
 				if values['action'] == 'snap':
 					scanhandler.reset_settings()
 					scanhandler.set_mode(values['imgtype'])
+					
+					scanhandler.set_brightness_and_contrast(
+						string.atoi(values['brightness']),
+						string.atoi(values['contrast']) )
+				
 					scanhandler.set_preview_rotation(string.atoi(values['rotation']))
 					scanhandler.update_preview(previewfile)
 					self.path=extbase+'/demo.html'
@@ -62,8 +67,12 @@ class ReqHandler(BaseHTTPRequestHandler):
 					self.sendHeaders('image/png')
 					scanhandler.reset_settings()
 					
-					
 					scanhandler.set_mode(values['imgtype'])
+					
+					scanhandler.set_brightness_and_contrast(
+						string.atoi(values['brightness']),
+						string.atoi(values['contrast']) )
+				
 					
 					if values['resolution'] == 'OTHER':
 						scanhandler.set_resolution(string.atof(values['custom_resolution']))

@@ -125,10 +125,11 @@ class ScanHandler:
 		print "Y2:",self.scanner.br_y
 		
 	def set_brightness_and_contrast(self, brightness,contrast):
-		self.brightness=brightness
-		self.contrast=contrast
-		return
-	
+		try:
+			self.scanner.brightness=brightness
+			self.scanner.contrast=contrast
+		except AttributeError:
+			print "Brightness/contrast disabled"
 			
 	def set_preview_rotation(self, rotation):
 		self.rotation=rotation
