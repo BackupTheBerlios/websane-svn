@@ -27,6 +27,7 @@ Todo:
 from xml.dom.minidom import parse
 import ConfigParser
 from time import time
+import string
 
 class XMLHandler:
 	input_radio={	"imgtype":"COLOR",
@@ -83,8 +84,8 @@ class XMLHandler:
 			if input.attributes['name'].value=='rotation':
 				if input.attributes['value'].value==rottoset:
 					input.setAttribute('checked','checked')
-				elif input.getAttributeNode('checked')!=None:
-					input.removeAttribute('checked')
+				else:
+					self.removeAttribute(input,'checked')
 
 	def setImageMode(self,mode):
 		for input in self.dom.getElementsByTagName('input'):
@@ -94,9 +95,15 @@ class XMLHandler:
 				elif input.getAttributeNode('checked') != None:
 					input.removeAttribute('checked')
 
+	def removeAttribute(self,element,attrname):
+		if element.getAttributeNode(attrname)!=None:
+			element.removeAttribute(attrname)
+		
 	def getDocument(self):
-		return self.dom.toxml('utf-8')
-	
+		doc=self.dom.toxml('utf-8')
+		return string.replace(doc,'<?xml version="1.0" encoding="utf-8"?>',' ',2)
+
+
 	def updateValues(self,values):
 		self.setBounds(values['left'],values['top'],values['width'],values['height'])
 		self.setImageMode(values['imgtype'])
@@ -110,8 +117,13 @@ class XMLHandler:
 				self.removeChildren(select)
 				if len(filenames) < 1:
 					select.setAttribute('disabled','disabled')
+					#select.appendChild(self.dom.createTextNode(' \n '))
 					self.addChildWithValueAndText(select,'option','','none')
+					#select.appendChild(self.dom.createTextNode(' \n '))
 					return
+				else:
+					self.removeAttribute(select,'disabled')
+
 				i='odd'
 				for filename in filenames:
 					if i=='odd':

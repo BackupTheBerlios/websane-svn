@@ -131,7 +131,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 		#If we cant open the file (=can't find the file) we send a 404
 		except IOError:
 			self.send_error(404, 'IOError')
-
+		self.wfile.close()
 	
 	#This handles a "post" from the browser by translating the post request to a get 
 	#request, which will be handled in the do_GET method.
