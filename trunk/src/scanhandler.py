@@ -26,10 +26,16 @@ class ScanHandler:
 	scanner=None
 	scannerdev=None
 	rotation=0
-	
+
+	#These are actually how to convert the websane representation of the 
+	#width of the image in to mm. I haven't implemented reading the
+	#bounds yet.
+	magicnum=65536.0
+	max_width=14149222.0/magicnum #The 14149222 is the width of the page as reported by python sane.
+	max_height=19475988.0/magicnum #height is the height of the page in mm.
+
+
 	config = ConfigParser.ConfigParser()
-	max_height=297.18
-	max_width=215.9
 	
 	#This is a constant and shouldn't be modified
 	mmperinch=25.4
@@ -90,6 +96,7 @@ class ScanHandler:
 		bottom_y=top_y + string.atoi(height_px) * self.mmperinch / self.previewres
 		self.__rotate_coords(top_x,top_y,bottom_x,bottom_y,string.atoi(rotation))
 	
+	
 	def __rotate_coords(self,top_x,top_y,bottom_x,bottom_y,rotation):
 		self.rotation=rotation
 		if rotation==0:
@@ -97,27 +104,32 @@ class ScanHandler:
 			self.scanner.lt_y=top_y
 			self.scanner.br_x=bottom_x
 			self.scanner.br_y=bottom_y
-		elif rotation==270:
-			self.scanner.br_y=self.max_height-top_x
-			self.scanner.tl_x=top_y
-			self.scanner.tl_y=self.max_height-bottom_x
-			self.scanner.br_x=bottom_y
-		elif rotation==180:
-			self.scanner.br_x=self.max_width-top_x
-			self.scanner.br_y=self.max_height-top_y
-			self.scanner.tl_x=self.max_width-bottom_x
-			self.scanner.tl_y=self.max_height-bottom_y
 		elif rotation==90:
 			self.scanner.tl_y=top_x
 			self.scanner.br_x=self.max_width-top_y
 			self.scanner.br_y=bottom_x
 			self.scanner.tl_x=self.max_width-bottom_y
+		elif rotation==180:
+			self.scanner.br_x=self.max_width-top_x
+			self.scanner.br_y=self.max_height-top_y
+			self.scanner.tl_x=self.max_width-bottom_x
+			self.scanner.tl_y=self.max_height-bottom_y
+		elif rotation==270:
+			self.scanner.br_y=self.max_height-top_x
+			self.scanner.tl_x=top_y
+			self.scanner.tl_y=self.max_height-bottom_x
+			self.scanner.br_x=bottom_y
 		print "X1:",self.scanner.tl_x
 		print "Y1:",self.scanner.tl_y
 		print "X2:",self.scanner.br_x
 		print "Y2:",self.scanner.br_y
 		
-
+	def set_brightness_and_contrast(self, brightness,contrast):
+		self.brightness=brightness
+		self.contrast=contrast
+		return
+	
+			
 	def set_preview_rotation(self, rotation):
 		self.rotation=rotation
 		
@@ -154,12 +166,6 @@ class ScanHandler:
 		devs=sane.get_devices()
 		print 'Fetching available devices took ',time()-t,'seconds'
 			
-		#We just use the first available device
 		self.scannerdev=devs[string.atoi(self.config.get('general','devicenumber'))][0]
 			
 		self.reset_settings()
-
-
-
-#	def __name__:
-#		return

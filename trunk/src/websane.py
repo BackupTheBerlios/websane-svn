@@ -31,15 +31,6 @@ import scanhandler
 #This is a constant and shouldn't be modified
 mmperinch=25.4
 
-#Undocumented but very important features.
-#These are actually how to convert the websane representation of the 
-#width of the image in to mm. Since I haven't implemented reading the
-#bounds yet, these are here just for reference.
-magicint=65536
-pwidth=14149222/magicint #The 14149222 is the width of the page as reported by python sane. Not used.
-pheight=19475988/magicint #pheight is the height of the page in mm. Not used.
-
-
 config = ConfigParser.ConfigParser()
 scanhandler = scanhandler.ScanHandler()
 
@@ -214,9 +205,8 @@ def main():
 	
 		server=HTTPServer(('',string.atoi(config.get('general', 'port'))), ReqHandler)
 		
-		print 'Webserver started'
+		print 'Webserver started. Serving until keyboard interrupt received (ctrl+c)'
 		server.serve_forever()
-		print 'Serving until keyboard interrupt received (ctrl+c)'
 	except KeyboardInterrupt:
 		print 'Shutting down server'
 		server.socket.close()
