@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF8 -*-
-# Copyright (C) 2005: Mikko Virkkilä
+# Copyright (C) 2005: Mikko Virkkilä (mvirkkil@cc.hut.fi)
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -99,8 +99,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 				self.sendHeaders('text/plain')
 				scanhandler.write_info(self.wfile)
 			
-			#We replace chair.jpg with the preview file.
-			elif self.path==extbase+'/chair.jpg':
+			#We replace preview.png with the preview file.
+			elif self.path==extbase+'/preview.png':
 				try: 
 					f=open(previewfile)
 				except IOError:

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF8 -*-
-# Copyright (C) 2005: Mikko Virkkilä
+# Copyright (C) 2005: Mikko Virkkilä (mvirkkil@cc.hut.fi)
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

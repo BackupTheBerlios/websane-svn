@@ -3,7 +3,7 @@
 	height: 370px;*/
 	margin-left:auto;
 	margin-right:auto;
-	background-image: url('../../chair.jpg');
+	background-image: url('../../preview.png');
 	background-repeat: no-repeat;
 	/*border: 30px solid #eee;*/
 	cursor: crosshair;
@@ -54,7 +54,7 @@
 	top:0;
 	left:0;
 	
-	background-image: url('../../chair.jpg');
+	background-image: url('../../preview.png');
 	background-position: 0px 0px;
 	background-attachment: scroll;
 	background-repeat: no-repeat;
