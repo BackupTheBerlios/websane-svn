@@ -1,0 +1,52 @@
+
+.groupBegin {
+	padding-bottom: 0;
+}
+.groupMember {
+	padding-top: 0;
+}
+
+
+#output {
+	margin: 3px;
+	padding: 2px;
+}
+
+#output .form_info {
+	font-size: 0.8em;
+	border: 1px solid #ccc;
+	width: 100%;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.dropbox {
+	border: 1px solid #ccc;
+	padding: 0;
+	margin: 0;
+}
+
+
+.checkbox {
+	padding: 0;
+	margin: 0;
+	/*border: 1px solid #ccc;*/ /*Shows weird in IE, not at all in mozilla*/
+}
+
+.buttonarea .button_left{
+	float: left;
+}
+.buttonarea .button_right{
+	float: right;
+}
+
+
+.threenumbers {
+	font-size: 0.8em;
+	border: 1px solid #ccc;
+	margin:0;
+	padding: 0;
+	/*margin-left: .3em;*/
+	width: 2em;
+	/*background: #f00;*/
+}

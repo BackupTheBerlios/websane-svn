@@ -1,0 +1,42 @@
+The main program is a python script named 
+websane.py in the src directory. 
+
+Check out the config files for configuration 
+options.
+
+You should extract the entire filestructure and 
+run the script from its own directory. 
+
+When you run the websane script it will create
+a webserver on your machine's local port 5423 
+and should point your (Gecko based) browser to 
+http://127.0.0.1:5423/demo.html to view the 
+interface. A lot of information (and possible
+errors) will be printed out by the websane.py
+script, so keep an eye on it for errors.
+
+By default it will serve out files from the 
+../demo (relative to the place from which it
+was started).
+
+Files are saved in a secure way, and when the
+python script exits it will delete the files.
+This means that if the script crashes, you will
+not loose you scans. If you exit normally all
+scanned files will be deleted.
+
+
+
+
+
+For debugging
+-------------
+For information about the scanner and its
+options point your browser to 
+http://127.0.0.1:5423/info
+
+To simply snap a preview image use
+http://127.0.0.1:5423/snap
+
+To quickly scan an image you can also use
+http://127.0.0.1:5423/scan
