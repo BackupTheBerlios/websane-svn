@@ -26,6 +26,7 @@ from time import sleep
 #from xml.dom.ext import PrettyPrint
 #from xml.dom import implementation
 #from xml.dom.ext.reader import Sax2
+import ConfigParser
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 #Not completely implemented. YOU SHOULD PROBABLY CHANGE THIS TO READ extbase=''
@@ -36,7 +37,7 @@ basepath='../demo'
 #Preview resolution
 previewres=30.0
 #This is a constant and shouldn't be modified
-inchinmm=25.4
+mmperinch=25.4
 
 #The preview file is stored here
 previewfile='/tmp/preview.png'
@@ -48,6 +49,10 @@ previewfile='/tmp/preview.png'
 magicint=65536
 pwidth=14149222/magicint #The 14149222 is the width of the page as reported by python sane. Not used.
 pheight=19475988/magicint #pheight is the height of the page in mm. Not used.
+
+
+config = ConfigParser.ConfigParser()
+config.read("mimetypes.cfg")
 
 class ReqHandler(BaseHTTPRequestHandler):
 	scanner=None
@@ -103,9 +108,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 	
 	#Handle a http request for a file
 	def do_GET(self):
-		if self.path == '/favicon.ico': #reroute annoying favicon requests so we don't have to send 404s
-			self.path = '/style/images/tmp.ico'
-	
+		if self.path == '/' and self.path == '':
+			self.path='/demo.html'
 		try:	
 			#If the path contains a ? then we should parse it and scan and stuff --> http://www.faqts.com/knowledge_base/view.phtml/aid/4373		
 			if self.path.find('?')!=-1:
@@ -137,10 +141,10 @@ class ReqHandler(BaseHTTPRequestHandler):
 						scanner.resolution=string.atof(values['resolution'])
 					
 					#Translate the pixel locations in to realworld coordinates (in to mm)
-					scanner.tl_x=string.atof(values['left']) * inchinmm / previewres 
-					scanner.tl_y=string.atof(values['top']) * inchinmm / previewres
-					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * inchinmm / previewres 
-					scanner.br_y=scanner.tl_y + string.atoi(values['height']) * inchinmm / previewres
+					scanner.tl_x=string.atof(values['left']) * mmperinch / previewres 
+					scanner.tl_y=string.atof(values['top']) * mmperinch / previewres
+					scanner.br_x=scanner.tl_x + string.atoi(values['width']) * mmperinch / previewres 
+					scanner.br_y=scanner.tl_y + string.atoi(values['height']) * mmperinch / previewres
 					
 					self.scan_and_save(self.wfile, values['filetype'])
 					return
@@ -149,7 +153,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 					self.send_response(200)
 					self.send_header('Content-type','text/html')
 					self.end_headers()
-					self.wfile.write("<html><head/><body>Error. Form has no button value. ",str(values),"</body></html>")
+					self.wfile.write("<html><head/><body>Error. No button value returned. ",str(values),"</body></html>")
 					return
 
 			#Snap a preview image and send it directly to the browser
@@ -255,22 +259,10 @@ class ReqHandler(BaseHTTPRequestHandler):
 		self.path = '%s?%s' % (self.path, data)
 		self.do_GET()
 	
-	#This really should be in a config file. It just maps extensions to mime types
+	#Maps extensions to mime types. Should handle unknown extensions more gracefully.
 	def getContentType(self):
-		if self.path.endswith('.png'):
-			return 'image/png'
-		elif self.path.endswith('.gif'):
-			return 'image/gif'
-		elif self.path.endswith('.jpg') | self.path.endswith('.jpeg'):
-			return 'image/jpeg'
-		elif self.path.endswith('.css'):
-			return 'text/css'
-		elif self.path.endswith('.js'):
-			return 'text/plain'
-		elif self.path.endswith('.html'):
-			return 'text/html'
-		elif self.path.endswith('.ico'):
-			return 'image/x-icon'
+                extension = string.split(self.path,'.')[-1]
+		return config.get('mimetypes', extension)
 
 	#This method is not written by me and as such is not licensed under the GPL
 	#Refer to the original code for the copyright holder and license.
