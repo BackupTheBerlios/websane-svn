@@ -28,34 +28,37 @@ An installed version of SANE and ImageMagic (for scanimage and convert respectiv
 Possibly apache if the server end can't run independently.
 </p>
 <h3>Open questions</h3>
-<p>
 <ul>
-<li>Should the overlay (darkening) be done on the server, or on the client as currently in the demo?</li>
-<ul>
-<li>Probably on the server as this would simplify the javascript part significantly -> less crossplatform problems</li>
-<li>The speed of the client would also be improved and the moire stuff would vanish if we used the server to create a darkened version of the preview.</li>
+	<li>
+		Should the overlay (darkening) be done on the server, or on the client as currently in the demo?
+		<ul>
+			<li>Probably on the server as this would simplify the javascript part significantly -> less crossplatform problems</li>
+			<li>The speed of the client would also be improved and the moire stuff would vanish if we used the server to create a darkened version of the preview.</li>
+		</ul>
+	</li>
+	<li>Should the server side run independently as a webserver, or on top of apache or both?</li>
+	<li>
+		How should saving, viewing of a saved image and deleting of a saved image work?
+		<ul>
+			<li>
+			I like the idea of putting everything in steps. First the person previews, 
+			sets the levels and selection and choses if the scanned image should be reviewed 
+			before save. Then if the user selected to review before save, she would get 
+			something similar to <a href="http://persistent.info/files/20040508.magnifier/">the magnifier</a>
+			and if she accepts, she would be given a Save As dialog (this is done by serving
+			the image as type octet-stream). 
+			</li>
+			<li>
+			Images should be stored for soemthing like 30mins and the url given to the user should
+			be ungessable and unique (=basedir/timestamp+randomnumbers/imagename.png).
+			</li>
+		</ul>
+	</li>
 </ul>
-<li>Should the server side run independently as a webserver, or on top of apache or both?</li>
-<li>How should saving, viewing of a saved image and deleting of a saved image work?</li>
-<ul><li>
-I like the idea of putting everything in steps. First the person previews, 
-sets the levels and selection and choses if the scanned image should be reviewed 
-before save. Then if the user selected to review before save, she would get 
-something similar to <a href="http://persistent.info/files/20040508.magnifier/">the magnifier</a>
-and if she accepts, she would be given a Save As dialog (this is done by serving
-the image as type octet-stream). 
-</li>
-<li>
-Images should be stored for soemthing like 30mins and the url given to the user should
-be ungessable and unique (=basedir/timestamp+randomnumbers/imagename.png).
-</li>
-</ul>
-</ul>
-</p>
+
 <h3>Goals</h3>
 <p>This are rough and are not attainable for the first release.</p>
 <h4>Primary</h4>
-<p>
 <ul>
 <li>Easy to use</li>
 <li>Cross platform and cross browser</li>
@@ -63,9 +66,7 @@ be ungessable and unique (=basedir/timestamp+randomnumbers/imagename.png).
 <li>Possibility of separating xhtml from backend</li>
 <li>Backend should be configurable</li>
 </ul>
-</p>
 <h4>Secondary</h4>
-<p>
 <ul>
 <li>Help system</li>
 <li>Clear debugging information on server</li>
@@ -73,5 +74,5 @@ be ungessable and unique (=basedir/timestamp+randomnumbers/imagename.png).
 <li>Scanner specific settings</li>
 <li>Showing more possibilities offered by convert</li>
 </ul>
-</p>
+
 </htmlPage>
