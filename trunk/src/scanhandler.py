@@ -47,6 +47,8 @@ class ScanHandler:
 	def scan_and_save(self, file, imgtype):
 		scanner=self.scanner
 
+		self.__rotate_coords()
+
 		t=time()				
 		scanner.start()
 		print 'Starting the scanner with the selected options took ',time()-t,'seconds'
@@ -91,6 +93,29 @@ class ScanHandler:
 	def set_rotation(self, rotation):
 		self.rotation=rotation
 	
+	def __rotate_coords(self):
+		if self.rotation=0:
+			return
+		elif self.rotation==90:
+			bottom_y=self.scanner.tl_x
+			top_x=self.scanner.tl_y
+			top_y=self.scanner.br_x
+			bottom_x=self.scanner.br_y
+		elif self.rotation==180:
+			bottom_x=self.scanner.tl_x
+			bottom_y=self.scanner.tl_y
+			top_x=self.scanner.br_x
+			top_y=self.scanner.br_y
+		elif self.rotation==270:
+			top_y=self.scanner.tl_x
+			bottom_x=self.scanner.tl_y
+			bottom_y=self.scanner.br_x
+			top_x=self.scanner.br_y
+		self.scanner.tl_x=top_x
+		self.scanner.tl_y=top_y
+		self.scanner.br_x=bottom_x
+		self.scanner.br_y=bottom_y
+		
 	def set_resolution(self, resolution):
 		self.scanner.resolution=string.atof(resolution)
 	
