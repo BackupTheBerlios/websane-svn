@@ -14,7 +14,7 @@
 	<xsl:template match="/site">
 		Transformation started
 		<xsl:for-each select="page">
-			<xsl:if test="*">
+			<xsl:if test="*"> <!-- Build the page if the node has children -->
 				Writing page <xsl:value-of select="@name" />
 				<xsl:document href="./{@name}" method="xml" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" indent="yes" omit-xml-declaration="yes">
 					<xsl:apply-templates select="news" />

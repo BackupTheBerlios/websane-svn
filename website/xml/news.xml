@@ -6,7 +6,7 @@
 		<doc>
 			<p>
 			This website was launced today. The entire site is automagically rebuilt each night from the xml sources in 
-			the subversion repository. A script fetches the subversion sources, and runs xml proc on the xml files using 
+			the subversion repository. A script fetches the subversion sources, and runs xsltproc on the xml files using 
 			an xslt stylesheet to create the site. Each part of the site is stored in a separate file that only contains 
 			data. What is to built is written the <a href="website/xml/site.xml">site.xml</a> file, and based on that the
 			xslt processor goes through the files and creates menus and links, in essence creates the entire site. 

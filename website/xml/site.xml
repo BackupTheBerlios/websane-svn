@@ -3,5 +3,5 @@
 <site xmlns:xi="http://www.w3.org/2001/XInclude">
 	<page name="index.html" inmenu="yes" menutitle="News" ><xi:include href="news.xml" /></page>
 	<page name="about.html" inmenu="yes" menutitle="About" ><xi:include href="about.xml" /></page>
-	<page name="demo/demo.html" inmenu="yes" menutitle="Demo" />
+	<page name="demo/demo.html" inmenu="yes" menutitle="Demo" /> <!-- Nodes with no children will just be added as links to the menu-->
 </site>
