@@ -116,11 +116,11 @@ class ReqHandler(BaseHTTPRequestHandler):
 				pathlist, values = self.urlParse(self.path)
 				
 				#Handle a refresh of the preview
-				if values['button'] == 'snap':
+				if values['action'] == 'snap':
 					self.update_preview()
 					self.path=extbase+'/demo.html'
 				#Handle a scan
-				elif values['button'] == 'scan':
+				elif values['action'] == 'scan':
 					self.send_response(200)
 					self.send_header('Content-type','image/png')
 					self.end_headers()
@@ -153,7 +153,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 					self.send_response(200)
 					self.send_header('Content-type','text/html')
 					self.end_headers()
-					self.wfile.write("<html><head/><body>Error. No button value returned. ",str(values),"</body></html>")
+					self.wfile.write("<html><head/><body>Error. No action value returned. ",str(values),"</body></html>")
 					return
 
 			#Snap a preview image and send it directly to the browser
