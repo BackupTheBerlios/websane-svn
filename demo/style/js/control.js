@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2005: Mikko Virkkil‰
+Copyright (C) 2005: Mikko Virkkil√§ (mvirkkil@cc.hut.fi)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -64,27 +64,18 @@ function findPosY(obj)
 
 
 
-
-
-
-
-
-
-
-
-
 function initControl(toGet, toSet) {	
 	if (window.Event) {
 		/*alert('Mozilla');*/
 		mozilla=true;
-		unit='px'; /*Though mozilla gladly accepts px; khtml doesn't so we just use px*/
+		unit='px'; /*Though mozilla gladly accepts 'px;' khtml doesn't so we just use 'px'*/
 	} else {
 		/*alert('IE');*/
 		mozilla=false;
 		unit='';
 	}
 	
-    document.getElementById(toSet).style.top=cont_height-getCurLevel(toGet)-float_half_height+unit;
+    document.getElementById(toSet).style.top=cont_height-50-(getCurLevel(toGet)/2)-float_half_height+unit;
     
 }
 
@@ -120,16 +111,16 @@ function changelevel(e) {
 	}
 	if(newY< 0) {newY=0;}
 	if(newY>cont_height) {newY=cont_height;}
-	stat.value=(100-newY)+'%';
+	stat.value=(100-2*newY);
 	floater.style.top=newY-float_half_height+unit;
 }
 
 function getCurLevel(toGet){
 	var result=document.getElementById(toGet).value;
-	var val=result.substr(0, result.length-1);
+	/*var val=result.substr(0, result.length-1);*/
 
 
-	return val;
+	return result;
 }
 
 function endcontrol(e){
