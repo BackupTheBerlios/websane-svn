@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-	<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> -->
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>WebSANE</title>
 
@@ -44,7 +43,7 @@
 	<div class="box">
 		<div class="box_title">Image type</div>
 		<div class="box_content">
-			<label><input type="radio" value="COLOR" name="imgtype" checked="checked" />Color</label><br />
+			<label><input type="radio" value="COLOR" name="imgtype" />Color</label><br />
 			<label><input type="radio" value="GRAY" name="imgtype" />Grayscale</label><br />
 			<label><input type="radio" value="BW" name="imgtype" />Black&amp;White</label><br />
 		</div>
@@ -53,7 +52,7 @@
 	<div class="box">
 		<div class="box_title">Rotation</div>
 		<div class="box_content">
-			<label><input type="radio" value="0" name="rotation" checked="checked" />None</label><br />
+			<label><input type="radio" value="0" name="rotation" />None</label><br />
 			<label><input type="radio" value="270" name="rotation" />90&deg; clockwise</label><br />
 			<label><input type="radio" value="90" name="rotation" />90&deg; counter-clockwise</label><br />
 			<label><input type="radio" value="180" name="rotation" />180&deg;</label><br />
@@ -105,9 +104,9 @@
 					</select>
 				</td></tr>
 				
-				<tr><td class="groupMember">&nbsp;</td><td class="groupMember"><input type="text" name="custom_resolution" disabled="disabled" class="form_info"/></td></tr>
+				<tr><td class="groupMember">&nbsp;</td><td class="groupMember"><input type="text" name="custom_resolution" disabled="disabled" class="form_info" value=""/></td></tr>
 				
-				<tr class="fileinfo hidden"><td >Filename:</td><td><input type="text" name="filename" class="form_info"/></td></tr>
+				<tr class="fileinfo hidden"><td >Filename:</td><td><input type="text" name="filename" class="form_info" value=""/></td></tr>
 				<tr class="fileinfo"><td>Filetype:</td><td>
 					<select name="filetype" class="drobox">
 						<option value="PNG">png</option>
@@ -117,7 +116,7 @@
 					</select>
 				</td></tr>
 				
-				<tr class="hidden"><td>View saved:</td><td><input type="checkbox" name="check" class="checkbox" /></td></tr>
+				<tr class="hidden"><td>View saved:</td><td><input type="checkbox" name="before_save" value="view" class="checkbox" /></td></tr>
 			</table>
 		</div>
 		

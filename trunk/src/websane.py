@@ -37,6 +37,24 @@ extbase=config.get('general','externalbasepath')
 basepath=config.get('general','webserverbase')
 previewfile=config.get('general','previewfile')
 
+input_radio={	"imgtype":"COLOR",
+				"rotation":"0"}
+
+input_text={	"brightness":"0",
+				"contrast":"0",
+				"custom_resolution":"0",
+				"filename":"",
+				"left":"20",
+				"top":"50",
+				"width":"100",
+				"height":"200" }
+
+input_hidden={	"action":"" }
+
+input_checkbox={"before_save":"view"}
+
+select{			"filetype":"PNG",
+				"resolution":"200"}
 class ReqHandler(BaseHTTPRequestHandler):
 
 	#Handle a http request for a file
@@ -108,6 +126,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 				self.end_headers()
 				
 				dom=parse(f)
+				for input in dom.getElementsByTagName('input'):
+					print input.attributes['name'].value, input.attributes['value'].value
 				self.wfile.write(dom.toxml('UTF8'))
 				dom.unlink() #Clean up
 				f.close()
