@@ -11,5 +11,8 @@
 	
 	<!-- Nodes with no children will just be added as links to the menu-->
 	<page name="http://developer.berlios.de/forum/forum.php?forum_id=9269" inmenu="yes" menutitle="Feedback forum" />
+	<page name="links.html" inmenu="yes" menutitle="Links" >
+		<xi:include href="links.xml" />
+	</page>
 	<page name="demo/demo.html" inmenu="yes" menutitle="Demo" /> 
 </site>
