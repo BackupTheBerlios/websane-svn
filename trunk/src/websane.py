@@ -51,50 +51,9 @@ class ReqHandler(BaseHTTPRequestHandler):
 			#If the path contains a ? then we should parse it and scan and stuff
 			if self.path.find('?')!=-1:
 				pathlist, values = self.urlParse(self.path)
-				
-				#Handle a refresh of the preview
-				if values['action'] == 'snap':
-					xmlhandler.updateValues(values)
-					scanhandler.reset_settings()
-					scanhandler.set_mode(values['imgtype'])
-					
-					scanhandler.set_brightness_and_contrast(
-						string.atoi(values['brightness']),
-						string.atoi(values['contrast']) )
-					
-					
-					scanhandler.set_preview_rotation(string.atoi(values['rotation']))
-					scanhandler.update_preview(previewfile)
-					self.path=extbase+'/demo.html'
-				#Handle a scan
-				elif values['action'] == 'scan':
-					self.sendHeaders('text/html')
-					scanhandler.reset_settings()
-					
-					scanhandler.set_mode(values['imgtype'])
-					
-					scanhandler.set_brightness_and_contrast(
-						string.atoi(values['brightness']),
-						string.atoi(values['contrast']) )
-				
-					
-					if values['resolution'] == 'OTHER':
-						scanhandler.set_resolution(string.atof(values['custom_resolution']))
-					else:
-						scanhandler.set_resolution(string.atof(values['resolution']))
-					
-					scanhandler.set_scan_bounds_from_preview(values['left'],values['top'],values['width'],values['height'],values['rotation'])
-					scanhandler.scan_and_save(filehandler.createFile('storedfiles/'+values['filename']), values['filetype'])
-					
-					self.wfile.write('<html><head/><body>Download it from <a href="storedfiles/'+values['filename']+'">storedfiles/'+values['filename']+'</a></body></html>')
-					
+				if self.handleActions(values):
 					return
-				#Error, print some debugging info
-				else:
-					self.sendHeaders('text/html')
-					self.wfile.write("<html><head/><body>Error. No action value returned. ",str(values),"</body></html>")
-					return
-			
+
 			if self.path.startswith(extbase+'/storedfiles/'):
 				path, values=urlparse(self.path)
 				print "Looking for stored file"
@@ -106,6 +65,11 @@ class ReqHandler(BaseHTTPRequestHandler):
 				else:
 					print "stored file not found"
 					raise IOError
+
+			elif self.path==extbase+'/demo.html':
+				self.sendHeaders('text/html')
+				self.wfile.write(xmlhandler.getDocument())
+							
 			#Snap a preview image and send it directly to the browser
 			elif self.path==extbase+'/snap':
 				print "Taking snapshot"
@@ -118,10 +82,6 @@ class ReqHandler(BaseHTTPRequestHandler):
 				scanhandler.set_resolution(300.0)
 				scanhandler.scan_and_save(self.wfile, 'PNG')
 				
-			elif self.path==extbase+'/demo.html':
-				self.sendHeaders('text/html')
-				self.wfile.write(xmlhandler.getDocument())
-							
 			#Used for debugging. Displays info about scanner.
 			elif self.path==extbase+'/info':
 				self.sendHeaders('text/plain')
@@ -219,6 +179,77 @@ class ReqHandler(BaseHTTPRequestHandler):
 				except:
 					pass
 		return (pathlist, d)
+
+	'''Returns true if done, false if more is needed'''
+	def handleActions(self,values):
+		#Handle a refresh of the preview
+		if values['action'] == 'snap':
+			scanhandler.reset_settings()
+			scanhandler.set_mode(values['imgtype'])
+			
+			scanhandler.set_brightness_and_contrast(
+				string.atoi(values['brightness']),
+				string.atoi(values['contrast']) )
+			
+			
+			scanhandler.set_preview_rotation(string.atoi(values['rotation']))
+			scanhandler.update_preview(previewfile)
+			self.path=extbase+'/demo.html'
+
+		#Handle a scan
+		elif values['action'] == 'scan':
+			scanhandler.reset_settings()
+			
+			scanhandler.set_mode(values['imgtype'])
+			
+			scanhandler.set_brightness_and_contrast(
+				string.atoi(values['brightness']),
+				string.atoi(values['contrast']) )
+			
+			if values['resolution'] == 'OTHER':
+				scanhandler.set_resolution(string.atof(values['custom_resolution']))
+			else:
+				scanhandler.set_resolution(string.atof(values['resolution']))
+			
+			scanhandler.set_scan_bounds_from_preview(values['left'],values['top'],values['width'],values['height'],values['rotation'])
+			
+			if values['before_save']==send:
+				self.sendHeaders('application/octet-stream')
+				scanhandler.scan_and_save(self.wfile,values['filetype'])
+				return True
+			else:
+				scanhandler.scan_and_save(filehandler.createFile('storedfiles/'+values['filename']), values['filetype'])
+			
+			xmlhandler.setFiles(filehandler.getFilenames())
+			self.path=extbase+'/demo.html'			
+			
+		
+		#DELETE_ALL
+		elif values['action']=='delete_all':
+			filehandler.deleteAllFiles()
+			xmlhandler.setFiles(filehandler.getFilenames())
+			self.path=extbase+'/demo.html'
+			
+		#DELETE
+		elif values['action']=='delete':
+			filehandler.deleteFile(values['selected_file'])
+			xmlhandler.setFiles(filehandler.getFilenames())
+			self.path=extbase+'/demo.html'
+		#VIEW
+		elif values['action']=='view':
+			print "Not implemented"
+			self.path=extbase+'/viewer.html'
+		#DOWNLOAD
+		elif values['action']=='download':
+			#FIXME: We should do a redirection
+			self.path=extbase+'/storedfiles/'+values['selected_file']
+		#Error, print some debugging info
+		else:
+			print "No/unknown action value returned:",str(values)
+			raise IOError
+		
+		xmlhandler.updateValues(values)		
+		return False
 
 def main():
 	try:

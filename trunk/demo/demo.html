@@ -117,7 +117,7 @@
 					</select>
 				</td></tr>
 				
-				<tr><td>Send directly to browser:</td><td><input type="checkbox" name="before_save" value="send" class="checkbox" /></td></tr>
+				<tr><td>Download directly:</td><td><input type="checkbox" name="before_save" value="send" class="checkbox" /></td></tr>
 				<tr><td></td><td style="text-align: right;"><button type="submit" name="button" value="scan" onclick="document.getElementById('actionelement').value='scan'"><img src="style/images/save.gif" alt="Scan" />Scan</button></td></tr>
 			</table>
 		</div>
@@ -139,7 +139,7 @@
 			</div>	
 		</div>  <!-- end box_content-->
 	
-		<button style="margin: 1em"type="submit" name="button" value="snap" onclick="document.getElementById('actionelement').value='snap'"><img src="style/images/scan.gif" alt="Preview" />Refresh preview</button>
+		<button style="margin-right: 1em;margin-bottom: 1em;" type="submit" name="button" value="snap" onclick="document.getElementById('actionelement').value='snap'"><img src="style/images/scan.gif" alt="Preview" />Refresh preview</button>
 		
 		<div class="box_footer" id="selection_info">
 			Left:<input type="text" id="left_coord" name="left" size="3" class="form_info" value="0" onkeypress="changeLeft(event,1);" onblur="applyNewCoords()" />
@@ -162,12 +162,14 @@
 				<option style="background: #f8f8f8" value="1">kissa</option>
 				<option value="1">kissa</option>
 			</select>
+			<button type="submit" name="button" value="delete_all" onclick="document.getElementById('actionelement').value='delete_all'"><img src="style/images/delete_all.gif" alt="" />Delete all</button>
 			<button type="submit" name="button" value="delete" onclick="document.getElementById('actionelement').value='delete'"><img src="style/images/delete.gif" alt="" />Delete</button>
-			<button type="submit" name="button" value="view" onclick="document.getElementById('actionelement').value='View'"><img src="style/images/View.gif" alt="" />View</button>
+			<button type="submit" name="button" value="view" onclick="document.getElementById('actionelement').value='view'"><img src="style/images/view.gif" alt="" />View</button>
+			<button type="submit" name="button" value="download" onclick="document.getElementById('actionelement').value='download'"><img src="style/images/download.gif" alt="" />Download</button>
 		<div>
 	</div>
 	
-<div><!--End centerpane-->
+</div><!--End centerpane-->
 
 
 <input type="hidden" name="action" value="" id="actionelement" />

@@ -104,6 +104,22 @@ class XMLHandler:
 		self.setBrightness(values['brightness'])
 		self.setRotation(values['rotation'])
 	
+	def setFiles(self,filenames):
+		for select in self.dom.getElementsByTagName('select'):
+			if select.attributes['name']=='selected_file':
+				while select.hasChildNodes():
+					select.removeChild(select.lastChild)
+				for filename in filenames:
+					addSelectionOption(select,filename,filename)
+				return	
+	
+	def addSelectionOption(self,selection,value,text):
+		a = self.dom.createElement('option')
+		a.setAttribute('value',value)
+		a.appendChild(self.dom.createTextNode(text))
+		selection.appendChild(a)
+		
+	
 	def __init__(self,filename):
 		t=time()
 		self.dom=parse(filename)
