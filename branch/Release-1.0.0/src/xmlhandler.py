@@ -108,6 +108,10 @@ class XMLHandler:
 		for select in self.dom.getElementsByTagName('select'):
 			if select.attributes['name'].value=='selected_file':
 				self.removeChildren(select)
+				if len(filenames) < 1:
+					select.setAttribute('disabled','disabled')
+					self.addChildWithValueAndText(select,'option','','none')
+					return
 				i='odd'
 				for filename in filenames:
 					if i=='odd':
