@@ -33,17 +33,16 @@ class FileHandler:
 			return False
 		
 		
-	def createFile(self,filename,contentType):
-		file=TemporaryFile()
+	def createFile(self,filename):
+		file=tempfile.TemporaryFile()
 		self.openfiles[filename]=file
 		return file
 		
-	def getContentType(self,filename):
-		return self.openfiles[filename]
-		
 	def loadFile(self,filename):
-		return self.openfiles[filename]
-		
+		f=self.openfiles[filename]
+		f.seek(0)
+		return f		
+
 	def deleteFile(self, filename):
 		self.openfiles[filename].close()
 		del self.openfiles[filename]

@@ -86,7 +86,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 					scanhandler.set_scan_bounds_from_preview(values['left'],values['top'],values['width'],values['height'],values['rotation'])
 					scanhandler.scan_and_save(filehandler.createFile('storedfiles/'+values['filename']), values['filetype'])
 					
-					self.wfile.write('<html><head/><body>Download it from <a href="storedfiles/'+filename+'">storedfiles/'+filename+'</a></body></html>')
+					self.wfile.write('<html><head/><body>Download it from <a href="storedfiles/'+values['filename']+'">storedfiles/'+values['filename']+'</a></body></html>')
 					
 					return
 				#Error, print some debugging info
@@ -97,13 +97,16 @@ class ReqHandler(BaseHTTPRequestHandler):
 			
 			if self.path.startswith(extbase+'/storedfiles/'):
 				print "Giving stored file"
-				if filehandler.exists('kuva.png'):
+				if filehandler.exists('storedfiles/kuva.png'):
+					print 'It seems the stored file exists'
 					self.sendHeaders('application/octet-stream')
-					self.wfile.write( filehandler.loadFile('kuva.png').read() )
+					self.wfile.write( filehandler.loadFile('storedfiles/kuva.png').read() )
+					print 'File sent'
 				else:
+					print "stored file not found"
 					raise IOError
 			#Snap a preview image and send it directly to the browser
-			if self.path==extbase+'/snap':
+			elif self.path==extbase+'/snap':
 				print "Taking snapshot"
 				self.sendHeaders('image/png')
 				scanhandler.update_preview(self.wfile)
