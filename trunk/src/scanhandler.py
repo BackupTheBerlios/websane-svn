@@ -52,15 +52,12 @@ class ScanHandler:
 
 	#Scans a file with the assigned settings and saves it.
 	def scan_and_save(self, file, imgtype):
-		scanner=self.scanner
-
 		t=time()				
-		scanner.start()
+		self.scanner.start()
 		print 'Starting the scanner with the selected options took ',time()-t,'seconds'
 		
-
 		t=time()
-		im=scanner.snap()
+		im=self.scanner.snap()
 		print 'Scanning image took ',time()-t,'seconds'
 		
 		t=time()
@@ -99,12 +96,7 @@ class ScanHandler:
 	
 	def __rotate_coords(self,top_x,top_y,bottom_x,bottom_y,rotation):
 		self.rotation=rotation
-		if rotation==0:
-			self.scanner.tl_x=top_x
-			self.scanner.lt_y=top_y
-			self.scanner.br_x=bottom_x
-			self.scanner.br_y=bottom_y
-		elif rotation==90:
+		if rotation==90:
 			self.scanner.tl_y=top_x
 			self.scanner.br_x=self.max_width-top_y
 			self.scanner.br_y=bottom_x
@@ -119,6 +111,12 @@ class ScanHandler:
 			self.scanner.tl_x=top_y
 			self.scanner.tl_y=self.max_height-bottom_x
 			self.scanner.br_x=bottom_y
+		else #rotation==0
+			self.scanner.tl_x=top_x
+			self.scanner.lt_y=top_y
+			self.scanner.br_x=bottom_x
+			self.scanner.br_y=bottom_y
+		
 		print "X1:",self.scanner.tl_x
 		print "Y1:",self.scanner.tl_y
 		print "X2:",self.scanner.br_x
@@ -129,7 +127,7 @@ class ScanHandler:
 			self.scanner.brightness=brightness
 			self.scanner.contrast=contrast
 		except AttributeError:
-			print "Brightness/contrast disabled"
+			print "Brightness/contrast not supported by scanner"
 			
 	def set_preview_rotation(self, rotation):
 		self.rotation=rotation
