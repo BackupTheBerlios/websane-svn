@@ -6,7 +6,7 @@ display: none;
 }
 #leftpane {
 	/*display: none; */
-	padding-top: 2em;
+	margin-top: 1em; /*Needs to be margin not padding or IE and Mozilla interpret it differently*/
 	position:absolute;
 	/*float: right;*/
 	width: 19em;

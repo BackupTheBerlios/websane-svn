@@ -54,7 +54,7 @@ button img {
 	margin-top: 1em;
 	/*margin-bottom: 2em;*/ /*Don't specify a margin here because Moz and IE interpret it differently*/
 	padding-top: 1em;
-	padding-bottom: 1em;
+/*	padding-bottom: 1em;*/
 	border-top: 4px solid #5b8066;/*should be a multiple of two to avoid visually interfering with background*/
 	border-bottom: 4px solid #5b8066; 
 	
