@@ -17,6 +17,10 @@
 					<xsl:call-template name="createHeader" />
 									
 					<div class="content">
+						<!--<h2>Tasks</h2>-->
+						<p>
+						The tasks within the subprojects are sorted according to priority,
+						</p>
 						<xsl:apply-templates select="subproject" />
 					</div>
 					
@@ -28,16 +32,41 @@
 	</xsl:template>
 	
 	<xsl:template match="subproject">
-		<h3><xsl:value-of select="subproject_name" /></h3>
-		<p><xsl:value-of select="description" /></p>
-		<div class="task">
-			<xsl:apply-templates select="task" />
+		<h3 class="subproject_title"><xsl:value-of select="subproject_name" /></h3>
+		<p class="subproject_description"><xsl:value-of select="description" /></p>
+		<div class="tasks">
+			<xsl:apply-templates select="task" ><xsl:sort  select="priority" order="descending" /></xsl:apply-templates>
 		</div>
 	</xsl:template>
 	
 	<xsl:template match="task">
-		<h4><xsl:value-of select="summary" /></h4>
-		<p><xsl:value-of select="details" /></p>
+		<div>
+			<xsl:attribute name="class">taskbox state_<xsl:apply-templates select="status_id" mode="getStatusName" /></xsl:attribute>
+			<table class="task">
+				<tr>
+					<td class="task_title"><xsl:value-of select="summary" /></td>
+					<td>
+						Assigned to: 
+						<xsl:for-each select="assigned_to" > 
+							<xsl:value-of select="@name" />
+							<xsl:if test="position()!=last()">, </xsl:if>
+								
+						</xsl:for-each> 
+					</td>
+				</tr><tr>
+					<td>Status: <span class="status"><xsl:apply-templates select="status_id" mode="getStatusName" /></span> (<xsl:value-of select="percent_complete" />% done)</td>
+				</tr><tr>
+					<td class="task_description" colspan="2">
+						<xsl:value-of select="details" />
+					</td>
+				</tr>
+			</table>
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="*" mode="getStatusName">
+		<xsl:if test=". = '1'">Open</xsl:if>
+		<xsl:if test=". = '2'">Closed</xsl:if>
 	</xsl:template>
 	
 </xsl:stylesheet>

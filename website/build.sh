@@ -11,7 +11,8 @@ then
 	echo ""
 	echo "Options:"
 	echo "--checkout		Check out from svn"
-	echo "--noupdate		Don't get update version from subversion"
+	echo "--noupdate		Don't update version from subversion"
+	echo "--nonet			Don't update and don't xinclude remote (will give errors)"
 	echo "--nobuild		Don't build html pages"
 	exit
 fi
@@ -36,6 +37,10 @@ do
 		;;
 	--checkout)
 		CHECKOUT="TRUE"
+		;;
+	--nonet)
+		NOUPDATE="TRUE"
+		PARAMS=$PARAMS' --nonet'
 		;;
 	*)
 		TARGETDIR=$i
@@ -71,13 +76,13 @@ if [ $NOBUILD != "TRUE" ]
 then 
 	OLD_DIR=`pwd`
 	cd $TARGETDIR
-	xsltproc --xinclude $OLD_DIR/xslt/builder.xsl $OLD_DIR/xml/site.xml
+	xsltproc $PARAMS --xinclude $OLD_DIR/xslt/builder.xsl $OLD_DIR/xml/site.xml
 	cd $OLD_DIR
 
 	
 	if [ ! -L $TARGETDIR"/style" ] 
 	then
-		echo "Creating symlink for style"
+		echo "Creating symlink for the style directory"
 		ln -s `pwd`/style $TARGETDIR/style
 	fi
 
