@@ -82,31 +82,30 @@ class ScanHandler:
 		towriteto.write( '\n\nOptions:\n'+str(scanner.get_options()) )
 	
 	#Translate the pixel locations in the preview to realworld coordinates (in to mm)
-	def set_scan_bounds_from_preview(self, x_px, y_px, width_px, height_px, previewres=None):
-		if previewres == None:
-			previewres=self.previewres
-		self.scanner.tl_x=string.atof(x_px) * self.mmperinch / previewres 
-		self.scanner.tl_y=string.atof(y_px) * self.mmperinch / previewres
-		self.scanner.br_x=self.scanner.tl_x + string.atoi(width_px) * self.mmperinch / previewres
-		self.scanner.br_y=self.scanner.tl_y + string.atoi(height_px) * self.mmperinch / previewres
+	def set_scan_bounds_from_preview(self, x_px, y_px, width_px, height_px, rotation=0, previewres=None):
+		if previewres != None:
+			self.previewres=string.atof(previewres)
+		self.scanner.tl_x=string.atof(x_px) * self.mmperinch / self.previewres 
+		self.scanner.tl_y=string.atof(y_px) * self.mmperinch / self.previewres
+		self.scanner.br_x=self.scanner.tl_x + string.atoi(width_px) * self.mmperinch / self.previewres
+		self.scanner.br_y=self.scanner.tl_y + string.atoi(height_px) * self.mmperinch / self.previewres
+		__rotate_coords(string.atoi(rotation))
 	
-	def set_rotation(self, rotation):
+	def __rotate_coords(self,rotation):
 		self.rotation=rotation
-	
-	def __rotate_coords(self):
-		if self.rotation=0:
+		if rotation==0:
 			return
-		elif self.rotation==90:
+		elif rotation==90:
 			bottom_y=self.scanner.tl_x
 			top_x=self.scanner.tl_y
 			top_y=self.scanner.br_x
 			bottom_x=self.scanner.br_y
-		elif self.rotation==180:
+		elif rotation==180:
 			bottom_x=self.scanner.tl_x
 			bottom_y=self.scanner.tl_y
 			top_x=self.scanner.br_x
 			top_y=self.scanner.br_y
-		elif self.rotation==270:
+		elif rotation==270:
 			top_y=self.scanner.tl_x
 			bottom_x=self.scanner.tl_y
 			bottom_y=self.scanner.br_x

@@ -79,8 +79,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 					else:
 						scanhandler.set_resolution(string.atof(values['resolution']))
 					
-					scanhandler.set_scan_bounds_from_preview(values['left'],values['top'],values['width'],values['height'])
-					scanhandler.set_rotation(string.atoi(values['rotation']))
+					scanhandler.set_scan_bounds_from_preview(values['left'],values['top'],values['width'],values['height'],values['rotation'])
 					scanhandler.scan_and_save(self.wfile, values['filetype'])
 					return
 				#Error, print some debugging info
