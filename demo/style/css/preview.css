@@ -1,10 +1,9 @@
 .preview {
-	/*margin: 1em;*/
 	width: 230px;
 	height: 370px;
 	margin-left:auto;
 	margin-right:auto;
-	background-image: url(../../chair.jpg);
+	background-image: url('../../chair.jpg');
 	background-repeat: no-repeat;
 	/*border: 30px solid #eee;*/
 	cursor: crosshair;
@@ -16,7 +15,7 @@
 	text-align:center;
 	padding-top: .2em;	
 	padding-bottom: .2em;
-	width: 100%;/* 290px;*/ /*width + 2xborder*/
+	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 	
@@ -45,9 +44,8 @@
 	background-image: url('../images/mask.gif');
 	top:0;
 	left:0;
-	width: 230px;
-	height: 370px;
-	cursor: crosshair;
+
+		cursor: crosshair;
 }
 
 #selection {
@@ -55,10 +53,8 @@
 	/*border: 1px solid #00f; *//* Causes off by one, needs changes to javascript, feel free to add a selection_border there*/
 	top:0;
 	left:0;
-	width: 230px;
-    height: 370px;
-
-	background-image: url(../../chair.jpg);
+	
+	background-image: url('../../chair.jpg');
 	background-position: 0px 0px;
 	background-attachment: scroll;
 	background-repeat: no-repeat;

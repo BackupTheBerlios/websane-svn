@@ -1,11 +1,10 @@
-var frame_border=0;
-var frame_width=230;
-var frame_height=370;
-
+var previewlocation='chair.jpg';
 
 var ARROW_UP = 38;
 var ARROW_DOWN = 40;
 
+var frame_width;
+var frame_height;
 var target=null;
 var comp;
 var startX=null;
@@ -29,18 +28,23 @@ function setSelectionConstants(){
 	overlay=document.getElementById('overlay');
 	info_form=document.getElementById('big_form');
 
-	frame_top=findPosY(target)+frame_border;
-	frame_left=findPosX(target)+frame_border;
+	frame_top=findPosY(target);
+	frame_left=findPosX(target);
 
-
-	cur_top=frame_border;
-	cur_left=frame_border;
+	/*We fetch the preview image to extract the widht and height*/
+	var im = new Image();
+	im.src=previewlocation;
+	frame_width=im.width;
+	frame_height=im.height;
+	
+	cur_top=0;
+	cur_left=0;
 	cur_width=frame_width;
 	cur_height=frame_height;
 	relX=0;
 	relY=0;
 	
-	applyNewCoords();	
+	applyNewCoords();
 	
 	/*Hack to get valid xhtml strict*/
 	document.getElementById('top_coord').autocomplete='off';
@@ -62,8 +66,8 @@ function getRelY(absY) {
 function startselection(e){
 	if (running) {return;} else {running=true;} /*Only start selection, if endselection has been called for the previous one*/
 
-	frame_top=findPosY(target)+frame_border;
-	frame_left=findPosX(target)+frame_border;
+	frame_top=findPosY(target);
+	frame_left=findPosX(target);
 	
 	if(mozilla) {	
 		startX=e.pageX;
