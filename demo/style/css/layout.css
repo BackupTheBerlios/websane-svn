@@ -1,0 +1,63 @@
+
+#toppane {
+
+display: none;
+
+}
+#leftpane {
+	/*display: none; */
+	padding-top: 2em;
+	position:absolute;
+	/*float: right;*/
+	width: 19em;
+	right: 1em;
+	text-align: center;
+	/*background-color: #f00;*/
+	padding-bottom: 3em;
+}
+
+#centerpane {
+	margin-top: 2em;
+	/*width: 25em;*/
+	margin-right: 21em;
+}
+
+#rightpane {
+display: none;
+	float: left;
+	width: 21em;
+}
+
+
+
+#footer {
+	display: none;
+	/*margin-right: 30em;*/
+	/*position: relative;*/
+	bottom: 1em;
+	clear: both;
+	border-top: 2px solid #5b8066;
+	border-bottom: 2px solid #5b8066;
+	/*width: 100%;*/
+	margin-top: 2em;
+	/*float: left;*/
+	text-align: center;
+	/*padding-top: 3px;*/ /*Dunno why it seems that there would be a bottom padding...*/
+	/*padding-bottom: 0;*/
+	font-size: 0.7em;
+	background-color: #e2ece6;
+	
+}
+#footer p{
+	margin: 0;
+	padding: 0.1em;
+}
+
+#footer a img {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+#footer a:visited, #footer a:link, #footer a:active {
+	text-decoration: none;
+}

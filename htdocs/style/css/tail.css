@@ -1,0 +1,16 @@
+
+.tail {
+	border-top: 2px solid #5b6680;
+	border-bottom: 2px solid #5b6680;
+	text-align: center;
+	/*padding-top: 3px;*/ /*Dunno why it seems that there would be a bottom padding if we have images*/
+	padding-bottom: .2em;
+	padding-top: .2em;
+	font-size: 0.7em;
+	margin-bottom: 1em;
+	/*background-color: #e2ece6;*/
+}
+
+.tail img {
+	border: 0;
+}

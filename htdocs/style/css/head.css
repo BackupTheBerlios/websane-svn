@@ -1,0 +1,19 @@
+.head {
+	padding-top: 1em;
+	padding-bottom: 1em;
+	background-color: #e2e6ef;
+	border-bottom: 1px solid #555;
+	background-image: url('../images/bg.gif');
+}
+
+.head h1 {
+	margin: 0;
+	text-align: center;
+}
+.head h2 {
+	color: #888;
+	font-size: 1.1em;
+	text-align: center;
+	margin: 0;
+}
+
