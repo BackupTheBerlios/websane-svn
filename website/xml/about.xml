@@ -14,9 +14,9 @@ several computer but just one scanner. With WebSANE's simple interface anyone ca
 they can use it from their computer, not the computer attached to the scanner. Easy and elegant.
 </p>
 <p>
-At this point there is only a web demo of the interface and the backend which is to be written in 
-php is missing. The frontend currently requires a gecko based browser. The demo also mostly works
-with Internet Explorer 6.
+The backend is written in python and the frontend uses HTML+CSS+Javascript. The frontend currently requires a browser based on 
+the gecko engine, though Opera and KHTML also mostly work. The demo works
+with Internet Explorer 6, but the actual program functions very poorly with IE6.
 </p>
 <p>
 WebSANE was inspired by the work Gunars Benga did on the <a href="http://sourceforge.net/projects/sanewi/">SANE Web Interface</a> project.
